@@ -1,0 +1,8 @@
+__pycache__/
+ext2/
+ext4/__pycache__/
+ext4/ext4.py.bak
+ext4/groupDescriptor.py.bak
+ext4Part
+my_drive
+scripts/

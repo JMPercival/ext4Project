@@ -1,0 +1,884 @@
+<table border="1">
+<tr>
+<th>Offset</th>
+<th>Size</th>
+<th>Name</th>
+<th>Description
+</th></tr>
+<tr>
+<td>0x0</td>
+<td>__le32</td>
+<td>s_inodes_count</td>
+<td>Total inode count.
+</td></tr>
+<tr>
+<td>0x4</td>
+<td>__le32</td>
+<td>s_blocks_count_lo</td>
+<td>Total block count.
+</td></tr>
+<tr>
+<td>0x8</td>
+<td>__le32</td>
+<td>s_r_blocks_count_lo</td>
+<td>This number of blocks can only be allocated by the super-user.
+</td></tr>
+<tr>
+<td>0xC</td>
+<td>__le32</td>
+<td>s_free_blocks_count_lo</td>
+<td>Free block count.
+</td></tr>
+<tr>
+<td>0x10</td>
+<td>__le32</td>
+<td>s_free_inodes_count</td>
+<td>Free inode count.
+</td></tr>
+<tr>
+<td>0x14</td>
+<td>__le32</td>
+<td>s_first_data_block</td>
+<td>First data block.  This must be at least 1 for 1k-block filesystems and is typically 0 for all other block sizes.
+</td></tr>
+<tr>
+<td>0x18</td>
+<td>__le32</td>
+<td>s_log_block_size</td>
+<td>Block size is 2 ^ (10 + s_log_block_size).
+</td></tr>
+<tr>
+<td>0x1C</td>
+<td>__le32</td>
+<td>s_log_cluster_size</td>
+<td>Cluster size is (2 ^ s_log_cluster_size) blocks if bigalloc is enabled, zero otherwise.
+</td></tr>
+<tr>
+<td>0x20</td>
+<td>__le32</td>
+<td>s_blocks_per_group</td>
+<td>Blocks per group.
+</td></tr>
+<tr>
+<td>0x24</td>
+<td>__le32</td>
+<td>s_clusters_per_group</td>
+<td>Clusters per group, if bigalloc is enabled.
+</td></tr>
+<tr>
+<td>0x28</td>
+<td>__le32</td>
+<td>s_inodes_per_group</td>
+<td>Inodes per group.
+</td></tr>
+<tr>
+<td>0x2C</td>
+<td>__le32</td>
+<td>s_mtime</td>
+<td>Mount time, in seconds since the epoch.
+</td></tr>
+<tr>
+<td>0x30</td>
+<td>__le32</td>
+<td>s_wtime</td>
+<td>Write time, in seconds since the epoch.
+</td></tr>
+<tr>
+<td>0x34</td>
+<td>__le16</td>
+<td>s_mnt_count</td>
+<td>Number of mounts since the last fsck.
+</td></tr>
+<tr>
+<td>0x36</td>
+<td>__le16</td>
+<td>s_max_mnt_count</td>
+<td>Number of mounts beyond which a fsck is needed.
+</td></tr>
+<tr>
+<td>0x38</td>
+<td>__le16</td>
+<td>s_magic</td>
+<td>Magic signature, 0xEF53
+</td></tr>
+<tr>
+<td>0x3A</td>
+<td>__le16</td>
+<td>s_state</td>
+<td>File system state.  Valid values are:
+<table>
+<tr>
+<td>0x0001</td>
+<td>Cleanly umounted
+</td></tr>
+<tr>
+<td>0x0002</td>
+<td>Errors detected
+</td></tr>
+<tr>
+<td>0x0004</td>
+<td>Orphans being recovered
+</td></tr></table>
+</td></tr>
+<tr>
+<td>0x3C</td>
+<td>__le16</td>
+<td>s_errors</td>
+<td>Behaviour when detecting errors.  One of:
+<table>
+<tr>
+<td>1</td>
+<td>Continue
+</td></tr>
+<tr>
+<td>2</td>
+<td>Remount read-only
+</td></tr>
+<tr>
+<td>3</td>
+<td>Panic
+</td></tr></table>
+</td></tr>
+<tr>
+<td>0x3E</td>
+<td>__le16</td>
+<td>s_minor_rev_level</td>
+<td>Minor revision level.
+</td></tr>
+<tr>
+<td>0x40</td>
+<td>__le32</td>
+<td>s_lastcheck</td>
+<td>Time of last check, in seconds since the epoch.
+</td></tr>
+<tr>
+<td>0x44</td>
+<td>__le32</td>
+<td>s_checkinterval</td>
+<td>Maximum time between checks, in seconds.
+</td></tr>
+<tr>
+<td>0x48</td>
+<td>__le32</td>
+<td>s_creator_os</td>
+<td>OS.  One of:
+<table>
+<tr>
+<td>0</td>
+<td>Linux
+</td></tr>
+<tr>
+<td>1</td>
+<td>Hurd
+</td></tr>
+<tr>
+<td>2</td>
+<td>Masix
+</td></tr>
+<tr>
+<td>3</td>
+<td>FreeBSD
+</td></tr>
+<tr>
+<td>4</td>
+<td>Lites
+</td></tr>
+</table>
+</td></tr>
+<tr>
+<td>0x4C</td>
+<td>__le32</td>
+<td>s_rev_level</td>
+<td>Revision level.  One of:
+<table>
+<tr>
+<td>0</td>
+<td>Original format
+</td></tr>
+<tr>
+<td>1</td>
+<td>v2 format w/ dynamic inode sizes
+</td></tr></table>
+</td></tr>
+<tr>
+<td>0x50</td>
+<td>__le16</td>
+<td>s_def_resuid</td>
+<td>Default uid for reserved blocks.
+</td></tr>
+<tr>
+<td>0x52</td>
+<td>__le16</td>
+<td>s_def_resgid</td>
+<td>Default gid for reserved blocks.
+</td></tr>
+<tr>
+<td colspan="4">These fields are for EXT4_DYNAMIC_REV superblocks only.
+<p>Note: the difference between the compatible feature set and
+the incompatible feature set is that if there is a bit set
+in the incompatible feature set that the kernel doesn't
+know about, it should refuse to mount the filesystem.
+</p><p>e2fsck's requirements are more strict; if it doesn't know
+about a feature in either the compatible or incompatible
+feature set, it must abort and not try to meddle with
+things it doesn't understand...
+</p>
+</td></tr>
+<tr>
+<td>0x54</td>
+<td>__le32</td>
+<td>s_first_ino</td>
+<td>First non-reserved inode.
+</td></tr>
+<tr>
+<td>0x58</td>
+<td>__le16</td>
+<td>s_inode_size</td>
+<td>Size of inode structure, in bytes.
+</td></tr>
+<tr>
+<td>0x5A</td>
+<td>__le16</td>
+<td>s_block_group_nr</td>
+<td>Block group # of this superblock.
+</td></tr>
+<tr>
+<td>0x5C</td>
+<td>__le32</td>
+<td>s_feature_compat</td>
+<td>Compatible feature set flags.  Kernel can still read/write this fs even if it doesn't understand a flag; fsck should not do that.  Any of:
+<table>
+<tr>
+<td>0x1</td>
+<td>Directory preallocation (COMPAT_DIR_PREALLOC).
+</td></tr>
+<tr>
+<td>0x2</td>
+<td>"imagic inodes".  Not clear from the code what this does (COMPAT_IMAGIC_INODES).
+</td></tr>
+<tr>
+<td>0x4</td>
+<td>Has a journal (COMPAT_HAS_JOURNAL).
+</td></tr>
+<tr>
+<td>0x8</td>
+<td>Supports extended attributes (COMPAT_EXT_ATTR).
+</td></tr>
+<tr>
+<td>0x10</td>
+<td>Has reserved GDT blocks for filesystem expansion (COMPAT_RESIZE_INODE).
+</td></tr>
+<tr>
+<td>0x20</td>
+<td>Has directory indices (COMPAT_DIR_INDEX).
+</td></tr>
+<tr>
+<td>0x40</td>
+<td>"Lazy BG".  Not in Linux kernel, seems to have been for uninitialized block groups? (COMPAT_LAZY_BG)
+</td></tr>
+<tr>
+<td>0x80</td>
+<td>"Exclude inode".  Not used. (COMPAT_EXCLUDE_INODE).
+</td></tr>
+<tr>
+<td>0x100</td>
+<td>"Exclude bitmap".  Seems to be used to indicate the presence of snapshot-related exclude bitmaps?  Not defined in kernel or used in e2fsprogs (COMPAT_EXCLUDE_BITMAP).
+</td></tr>
+<tr>
+<td>0x200</td>
+<td>Sparse Super Block, v2.  If this flag is set, the SB field s_backup_bgs points to the two block groups that contain backup superblocks (COMPAT_SPARSE_SUPER2).
+</td></tr></table>
+</td></tr>
+<tr>
+<td>0x60</td>
+<td>__le32</td>
+<td>s_feature_incompat</td>
+<td>Incompatible feature set.  If the kernel or fsck doesn't understand one of these bits, it should stop.  Any of:
+<table>
+<tr>
+<td>0x1</td>
+<td>Compression (INCOMPAT_COMPRESSION).
+</td></tr>
+<tr>
+<td>0x2</td>
+<td>Directory entries record the file type.  See ext4_dir_entry_2 below (INCOMPAT_FILETYPE).
+</td></tr>
+<tr>
+<td>0x4</td>
+<td>Filesystem needs recovery (INCOMPAT_RECOVER).
+</td></tr>
+<tr>
+<td>0x8</td>
+<td>Filesystem has a separate journal device (INCOMPAT_JOURNAL_DEV).
+</td></tr>
+<tr>
+<td>0x10</td>
+<td>Meta block groups.  See the earlier discussion of this feature (INCOMPAT_META_BG).
+</td></tr>
+<tr>
+<td>0x40</td>
+<td>Files in this filesystem use extents (INCOMPAT_EXTENTS).
+</td></tr>
+<tr>
+<td>0x80</td>
+<td>Enable a filesystem size of 2^64 blocks (INCOMPAT_64BIT).
+</td></tr>
+<tr>
+<td>0x100</td>
+<td>Multiple mount protection.  Not implemented (INCOMPAT_MMP).
+</td></tr>
+<tr>
+<td>0x200</td>
+<td>Flexible block groups.  See the earlier discussion of this feature (INCOMPAT_FLEX_BG).
+</td></tr>
+<tr>
+<td>0x400</td>
+<td>Inodes can be used for large extended attributes (INCOMPAT_EA_INODE).  (Not implemented?)
+</td></tr>
+<tr>
+<td>0x1000</td>
+<td>Data in directory entry (INCOMPAT_DIRDATA).  (Not implemented?)
+</td></tr>
+<tr>
+<td>0x2000</td>
+<td>Metadata checksum seed is stored in the superblock.  This feature enables the administrator to change the UUID of a metadata_csum filesystem while the filesystem is mounted; without it, the checksum definition requires all metadata blocks to be rewritten (INCOMPAT_CSUM_SEED).
+</td></tr>
+<tr>
+<td>0x4000</td>
+<td>Large directory &gt;2GB or 3-level htree (INCOMPAT_LARGEDIR).
+</td></tr>
+<tr>
+<td>0x8000</td>
+<td>Data in inode (INCOMPAT_INLINE_DATA).
+</td></tr>
+<tr>
+<td>0x10000</td>
+<td>Encrypted inodes are present on the filesystem.  (INCOMPAT_ENCRYPT).
+</td></tr></table>
+</td></tr>
+<tr>
+<td>0x64</td>
+<td>__le32</td>
+<td>s_feature_ro_compat</td>
+<td>Readonly-compatible feature set.  If the kernel doesn't understand one of these bits, it can still mount read-only.  Any of:
+<table>
+<tr>
+<td>0x1</td>
+<td>Sparse superblocks.  See the earlier discussion of this feature (RO_COMPAT_SPARSE_SUPER).
+</td></tr>
+<tr>
+<td>0x2</td>
+<td>This filesystem has been used to store a file greater than 2GiB (RO_COMPAT_LARGE_FILE).
+</td></tr>
+<tr>
+<td>0x4</td>
+<td>Not used in kernel or e2fsprogs (RO_COMPAT_BTREE_DIR).
+</td></tr>
+<tr>
+<td>0x8</td>
+<td>This filesystem has files whose sizes are represented in units of logical blocks, not 512-byte sectors.  This implies a very large file indeed! (RO_COMPAT_HUGE_FILE)
+</td></tr>
+<tr>
+<td>0x10</td>
+<td>Group descriptors have checksums.  In addition to detecting corruption, this is useful for lazy formatting with uninitialized groups (RO_COMPAT_GDT_CSUM).
+</td></tr>
+<tr>
+<td>0x20</td>
+<td>Indicates that the old ext3 32,000 subdirectory limit no longer applies (RO_COMPAT_DIR_NLINK).
+</td></tr>
+<tr>
+<td>0x40</td>
+<td>Indicates that large inodes exist on this filesystem (RO_COMPAT_EXTRA_ISIZE).
+</td></tr>
+<tr>
+<td>0x80</td>
+<td>This filesystem has a snapshot (RO_COMPAT_HAS_SNAPSHOT).
+</td></tr>
+<tr>
+<td>0x100</td>
+<td><a href="/index.php/Quota" title="Quota">Quota</a> (RO_COMPAT_QUOTA).
+</td></tr>
+<tr>
+<td>0x200</td>
+<td>This filesystem supports "bigalloc", which means that file extents are tracked in units of clusters (of blocks) instead of blocks (RO_COMPAT_BIGALLOC).
+</td></tr>
+<tr>
+<td>0x400</td>
+<td>This filesystem supports metadata checksumming. (RO_COMPAT_METADATA_CSUM; implies RO_COMPAT_GDT_CSUM, though GDT_CSUM must not be set)
+</td></tr>
+<tr>
+<td>0x800</td>
+<td>Filesystem supports replicas.  This feature is neither in the kernel nor e2fsprogs. (RO_COMPAT_REPLICA)
+</td></tr>
+<tr>
+<td>0x1000</td>
+<td>Read-only filesystem image; the kernel will not mount this image read-write and most tools will refuse to write to the image. (RO_COMPAT_READONLY)
+</td></tr></table>
+</td></tr>
+<tr>
+<td>0x68</td>
+<td>__u8</td>
+<td>s_uuid[16]</td>
+<td>128-bit UUID for volume.
+</td></tr>
+<tr>
+<td>0x78</td>
+<td>char</td>
+<td>s_volume_name[16]</td>
+<td>Volume label.
+</td></tr>
+<tr>
+<td>0x88</td>
+<td>char</td>
+<td>s_last_mounted[64]</td>
+<td>Directory where filesystem was last mounted.
+</td></tr>
+<tr>
+<td>0xC8 </td>
+<td>__le32</td>
+<td>s_algorithm_usage_bitmap</td>
+<td>For compression (Not used in e2fsprogs/Linux)
+</td></tr>
+<tr>
+<td colspan="4">Performance hints.  Directory preallocation should only happen if the EXT4_FEATURE_COMPAT_DIR_PREALLOC flag is on.
+</td></tr>
+<tr>
+<td>0xCC</td>
+<td>__u8</td>
+<td>s_prealloc_blocks</td>
+<td># of blocks to try to preallocate for ... files? (Not used in e2fsprogs/Linux)
+</td></tr>
+<tr>
+<td>0xCD</td>
+<td>__u8</td>
+<td>s_prealloc_dir_blocks</td>
+<td># of blocks to preallocate for directories. (Not used in e2fsprogs/Linux)
+</td></tr>
+<tr>
+<td>0xCE</td>
+<td>__le16</td>
+<td>s_reserved_gdt_blocks</td>
+<td>Number of reserved GDT entries for future filesystem expansion.
+</td></tr>
+<tr>
+<td colspan="4">Journaling support valid if EXT4_FEATURE_COMPAT_HAS_JOURNAL set.
+</td></tr>
+<tr>
+<td>0xD0</td>
+<td>__u8</td>
+<td>s_journal_uuid[16]</td>
+<td>UUID of journal superblock
+</td></tr>
+<tr>
+<td>0xE0</td>
+<td>__le32</td>
+<td>s_journal_inum</td>
+<td>inode number of journal file.
+</td></tr>
+<tr>
+<td>0xE4</td>
+<td>__le32</td>
+<td>s_journal_dev</td>
+<td>Device number of journal file, if the external journal feature flag is set.
+</td></tr>
+<tr>
+<td>0xE8</td>
+<td>__le32</td>
+<td>s_last_orphan</td>
+<td>Start of list of orphaned inodes to delete.
+</td></tr>
+<tr>
+<td>0xEC</td>
+<td>__le32</td>
+<td>s_hash_seed[4]</td>
+<td>HTREE hash seed.
+</td></tr>
+<tr>
+<td>0xFC</td>
+<td>__u8</td>
+<td>s_def_hash_version</td>
+<td>Default hash algorithm to use for directory hashes.  One of:
+<table>
+<tr>
+<td>0x0</td>
+<td>Legacy.
+</td></tr>
+<tr>
+<td>0x1</td>
+<td>Half MD4.
+</td></tr>
+<tr>
+<td>0x2</td>
+<td>Tea.
+</td></tr>
+<tr>
+<td>0x3</td>
+<td>Legacy, unsigned.
+</td></tr>
+<tr>
+<td>0x4</td>
+<td>Half MD4, unsigned.
+</td></tr>
+<tr>
+<td>0x5</td>
+<td>Tea, unsigned.
+</td></tr></table>
+</td></tr>
+<tr>
+<td>0xFD</td>
+<td>__u8</td>
+<td>s_jnl_backup_type</td>
+<td>If this value is 0 or EXT3_JNL_BACKUP_BLOCKS (1), then the <code>s_jnl_blocks</code> field contains a duplicate copy of the inode's <code>i_block[]</code> array and <code>i_size</code>.
+</td></tr>
+<tr>
+<td>0xFE</td>
+<td>__le16</td>
+<td>s_desc_size</td>
+<td>Size of group descriptors, in bytes, if the 64bit incompat feature flag is set.
+</td></tr>
+<tr>
+<td>0x100</td>
+<td>__le32</td>
+<td>s_default_mount_opts</td>
+<td>Default mount options.  Any of:
+<table>
+<tr>
+<td>0x0001</td>
+<td>Print debugging info upon (re)mount. (EXT4_DEFM_DEBUG)
+</td></tr>
+<tr>
+<td>0x0002</td>
+<td>New files take the gid of the containing directory (instead of the fsgid of the current process). (EXT4_DEFM_BSDGROUPS)
+</td></tr>
+<tr>
+<td>0x0004</td>
+<td>Support userspace-provided extended attributes. (EXT4_DEFM_XATTR_USER)
+</td></tr>
+<tr>
+<td>0x0008</td>
+<td>Support POSIX access control lists (ACLs). (EXT4_DEFM_ACL)
+</td></tr>
+<tr>
+<td>0x0010</td>
+<td>Do not support 32-bit UIDs. (EXT4_DEFM_UID16)
+</td></tr>
+<tr>
+<td>0x0020</td>
+<td>All data and metadata are commited to the journal. (EXT4_DEFM_JMODE_DATA)
+</td></tr>
+<tr>
+<td>0x0040</td>
+<td>All data are flushed to the disk before metadata are committed to the journal. (EXT4_DEFM_JMODE_ORDERED)
+</td></tr>
+<tr>
+<td>0x0060</td>
+<td>Data ordering is not preserved; data may be written after the metadata has been written. (EXT4_DEFM_JMODE_WBACK)
+</td></tr>
+<tr>
+<td>0x0100</td>
+<td>Disable write flushes. (EXT4_DEFM_NOBARRIER)
+</td></tr>
+<tr>
+<td>0x0200</td>
+<td>Track which blocks in a filesystem are metadata and therefore should not be used as data blocks.  This option will be enabled by default on 3.18, hopefully. (EXT4_DEFM_BLOCK_VALIDITY)
+</td></tr>
+<tr>
+<td>0x0400</td>
+<td>Enable DISCARD support, where the storage device is told about blocks becoming unused. (EXT4_DEFM_DISCARD)
+</td></tr>
+<tr>
+<td>0x0800</td>
+<td>Disable delayed allocation. (EXT4_DEFM_NODELALLOC)
+</td></tr></table>
+</td></tr>
+<tr>
+<td>0x104</td>
+<td>__le32</td>
+<td>s_first_meta_bg</td>
+<td>First metablock block group, if the meta_bg feature is enabled.
+</td></tr>
+<tr>
+<td>0x108</td>
+<td>__le32</td>
+<td>s_mkfs_time</td>
+<td>When the filesystem was created, in seconds since the epoch.
+</td></tr>
+<tr>
+<td>0x10C</td>
+<td>__le32</td>
+<td>s_jnl_blocks[17]</td>
+<td>Backup copy of the journal inode's <code>i_block[]</code> array in the first 15 elements and i_size_high and i_size in the 16th and 17th elements, respectively.
+</td></tr>
+<tr>
+<td colspan="4">64bit support valid if EXT4_FEATURE_COMPAT_64BIT
+</td></tr>
+<tr>
+<td>0x150</td>
+<td>__le32</td>
+<td>s_blocks_count_hi</td>
+<td>High 32-bits of the block count.
+</td></tr>
+<tr>
+<td>0x154</td>
+<td>__le32</td>
+<td>s_r_blocks_count_hi</td>
+<td>High 32-bits of the reserved block count.
+</td></tr>
+<tr>
+<td>0x158</td>
+<td>__le32</td>
+<td>s_free_blocks_count_hi</td>
+<td>High 32-bits of the free block count.
+</td></tr>
+<tr>
+<td>0x15C</td>
+<td>__le16</td>
+<td>s_min_extra_isize</td>
+<td>All inodes have at least # bytes.
+</td></tr>
+<tr>
+<td>0x15E</td>
+<td>__le16</td>
+<td>s_want_extra_isize</td>
+<td>New inodes should reserve # bytes.
+</td></tr>
+<tr>
+<td>0x160</td>
+<td>__le32</td>
+<td>s_flags</td>
+<td>Miscellaneous flags.  Any of:
+<table>
+<tr>
+<td>0x0001</td>
+<td>Signed directory hash in use.
+</td></tr>
+<tr>
+<td>0x0002</td>
+<td>Unsigned directory hash in use.
+</td></tr>
+<tr>
+<td>0x0004</td>
+<td>To test development code.
+</td></tr></table>
+</td></tr>
+<tr>
+<td>0x164</td>
+<td>__le16</td>
+<td>s_raid_stride</td>
+<td>RAID stride.  This is the number of logical blocks read from or written to the disk before moving to the next disk.  This affects the placement of filesystem metadata, which will hopefully make RAID storage faster.
+</td></tr>
+<tr>
+<td>0x166</td>
+<td>__le16</td>
+<td>s_mmp_interval</td>
+<td># seconds to wait in multi-mount prevention (MMP) checking.  In theory, MMP is a mechanism to record in the superblock which host and device have mounted the filesystem, in order to prevent multiple mounts.  This feature does not seem to be implemented...
+</td></tr>
+<tr>
+<td>0x168</td>
+<td>__le64</td>
+<td>s_mmp_block</td>
+<td>Block # for multi-mount protection data.
+</td></tr>
+<tr>
+<td>0x170</td>
+<td>__le32</td>
+<td>s_raid_stripe_width</td>
+<td>RAID stripe width.  This is the number of logical blocks read from or written to the disk before coming back to the current disk.  This is used by the block allocator to try to reduce the number of read-modify-write operations in a RAID5/6.
+</td></tr>
+<tr>
+<td>0x174</td>
+<td>__u8</td>
+<td>s_log_groups_per_flex</td>
+<td>Size of a flexible block group is 2 ^ <code>s_log_groups_per_flex</code>.
+</td></tr>
+<tr>
+<td>0x175</td>
+<td>__u8</td>
+<td>s_checksum_type</td>
+<td>Metadata checksum algorithm type.  The only valid value is 1 (crc32c).
+</td></tr>
+<tr>
+<td>0x176</td>
+<td>__le16</td>
+<td>s_reserved_pad</td>
+<td>
+</td></tr>
+<tr>
+<td>0x178</td>
+<td>__le64</td>
+<td>s_kbytes_written</td>
+<td>Number of KiB written to this filesystem over its lifetime.
+</td></tr>
+<tr>
+<td>0x180</td>
+<td>__le32</td>
+<td>s_snapshot_inum</td>
+<td>inode number of active snapshot. (Not used in e2fsprogs/Linux.)
+</td></tr>
+<tr>
+<td>0x184</td>
+<td>__le32</td>
+<td>s_snapshot_id</td>
+<td>Sequential ID of active snapshot. (Not used in e2fsprogs/Linux.)
+</td></tr>
+<tr>
+<td>0x188</td>
+<td>__le64</td>
+<td>s_snapshot_r_blocks_count</td>
+<td>Number of blocks reserved for active snapshot's future use. (Not used in e2fsprogs/Linux.)
+</td></tr>
+<tr>
+<td>0x190</td>
+<td>__le32</td>
+<td>s_snapshot_list</td>
+<td>inode number of the head of the on-disk snapshot list. (Not used in e2fsprogs/Linux.)
+</td></tr>
+<tr>
+<td>0x194</td>
+<td>__le32</td>
+<td>s_error_count</td>
+<td>Number of errors seen.
+</td></tr>
+<tr>
+<td>0x198</td>
+<td>__le32</td>
+<td>s_first_error_time</td>
+<td>First time an error happened, in seconds since the epoch.
+</td></tr>
+<tr>
+<td>0x19C</td>
+<td>__le32</td>
+<td>s_first_error_ino</td>
+<td>inode involved in first error.
+</td></tr>
+<tr>
+<td>0x1A0</td>
+<td>__le64</td>
+<td>s_first_error_block</td>
+<td>Number of block involved of first error.
+</td></tr>
+<tr>
+<td>0x1A8</td>
+<td>__u8</td>
+<td>s_first_error_func[32]</td>
+<td>Name of function where the error happened.
+</td></tr>
+<tr>
+<td>0x1C8</td>
+<td>__le32</td>
+<td>s_first_error_line</td>
+<td>Line number where error happened.
+</td></tr>
+<tr>
+<td>0x1CC</td>
+<td>__le32</td>
+<td>s_last_error_time</td>
+<td>Time of most recent error, in seconds since the epoch.
+</td></tr>
+<tr>
+<td>0x1D0</td>
+<td>__le32</td>
+<td>s_last_error_ino</td>
+<td>inode involved in most recent error.
+</td></tr>
+<tr>
+<td>0x1D4</td>
+<td>__le32</td>
+<td>s_last_error_line</td>
+<td>Line number where most recent error happened.
+</td></tr>
+<tr>
+<td>0x1D8</td>
+<td>__le64</td>
+<td>s_last_error_block</td>
+<td>Number of block involved in most recent error.
+</td></tr>
+<tr>
+<td>0x1E0</td>
+<td>__u8</td>
+<td>s_last_error_func[32]</td>
+<td>Name of function where the most recent error happened.
+</td></tr>
+<tr>
+<td>0x200</td>
+<td>__u8</td>
+<td>s_mount_opts[64]</td>
+<td>ASCIIZ string of mount options.
+</td></tr>
+<tr>
+<td>0x240</td>
+<td>__le32</td>
+<td>s_usr_quota_inum</td>
+<td>Inode number of user <a href="/index.php/Quota" title="Quota">quota</a> file.
+</td></tr>
+<tr>
+<td>0x244</td>
+<td>__le32</td>
+<td>s_grp_quota_inum</td>
+<td>Inode number of group <a href="/index.php/Quota" title="Quota">quota</a> file.
+</td></tr>
+<tr>
+<td>0x248</td>
+<td>__le32</td>
+<td>s_overhead_blocks</td>
+<td>Overhead blocks/clusters in fs. (Huh? This field is always zero, which means that the kernel calculates it dynamically.)
+</td></tr>
+<tr>
+<td>0x24C</td>
+<td>__le32</td>
+<td>s_backup_bgs[2]</td>
+<td>Block groups containing superblock backups (if sparse_super2)
+</td></tr>
+<tr>
+<td>0x254</td>
+<td>__u8</td>
+<td>s_encrypt_algos[4]</td>
+<td>Encryption algorithms in use.  There can be up to four algorithms in use at any time; valid algorithm codes are given below:
+<table>
+<tr>
+<td>0</td>
+<td>Invalid algorithm (ENCRYPTION_MODE_INVALID).
+</td></tr>
+<tr>
+<td>1</td>
+<td>256-bit AES in XTS mode (ENCRYPTION_MODE_AES_256_XTS).
+</td></tr>
+<tr>
+<td>2</td>
+<td>256-bit AES in GCM mode (ENCRYPTION_MODE_AES_256_GCM).
+</td></tr>
+<tr>
+<td>3</td>
+<td>256-bit AES in CBC mode (ENCRYPTION_MODE_AES_256_CBC).
+</td></tr></table>
+</td></tr>
+<tr>
+<td>0x258</td>
+<td>__u8</td>
+<td>s_encrypt_pw_salt[16]</td>
+<td>Salt for the string2key algorithm for encryption.
+</td></tr>
+<tr>
+<td>0x268</td>
+<td>__le32</td>
+<td>s_lpf_ino</td>
+<td>Inode number of lost+found
+</td></tr>
+<tr>
+<td>0x26C</td>
+<td>__le32</td>
+<td>s_checksum_seed</td>
+<td>Checksum seed used for metadata_csum calculations.  This value is crc32c(~0, $orig_fs_uuid).
+</td></tr>
+<tr>
+<td>0x270</td>
+<td>__le32</td>
+<td>s_reserved[99]</td>
+<td>Padding to the end of the block.
+</td></tr>
+<tr>
+<td>0x3FC</td>
+<td>__le32</td>
+<td>s_checksum</td>
+<td>Superblock checksum.
+</td></tr></table>

@@ -1,0 +1,160 @@
+<tbody><tr>
+<th>Offset</th>
+<th>Size</th>
+<th>Name</th>
+<th>Description
+</th></tr>
+<tr>
+<td>0x0</td>
+<td>__le32</td>
+<td>bg_block_bitmap_lo</td>
+<td>Lower 32-bits of location of block bitmap.
+</td></tr>
+<tr>
+<td>0x4</td>
+<td>__le32</td>
+<td>bg_inode_bitmap_lo</td>
+<td>Lower 32-bits of location of inode bitmap.
+</td></tr>
+<tr>
+<td>0x8</td>
+<td>__le32</td>
+<td>bg_inode_table_lo</td>
+<td>Lower 32-bits of location of inode table.
+</td></tr>
+<tr>
+<td>0xC</td>
+<td>__le16</td>
+<td>bg_free_blocks_count_lo</td>
+<td>Lower 16-bits of free block count.
+</td></tr>
+<tr>
+<td>0xE</td>
+<td>__le16</td>
+<td>bg_free_inodes_count_lo</td>
+<td>Lower 16-bits of free inode count.
+</td></tr>
+<tr>
+<td>0x10</td>
+<td>__le16</td>
+<td>bg_used_dirs_count_lo</td>
+<td>Lower 16-bits of directory count.
+</td></tr>
+<tr>
+<td>0x12</td>
+<td>__le16</td>
+<td>bg_flags</td>
+<td>Block group flags.  Any of:
+<table>
+<tbody><tr>
+<td>0x1</td>
+<td>inode table and bitmap are not initialized (EXT4_BG_INODE_UNINIT).
+</td></tr>
+<tr>
+<td>0x2</td>
+<td>block bitmap is not initialized (EXT4_BG_BLOCK_UNINIT).
+</td></tr>
+<tr>
+<td>0x4</td>
+<td>inode table is zeroed (EXT4_BG_INODE_ZEROED).
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td>0x14</td>
+<td>__le32</td>
+<td>bg_exclude_bitmap_lo</td>
+<td>Lower 32-bits of location of snapshot exclusion bitmap.
+</td></tr>
+<tr>
+<td>0x18</td>
+<td>__le16</td>
+<td>bg_block_bitmap_csum_lo</td>
+<td>Lower 16-bits of the block bitmap checksum.
+</td></tr>
+<tr>
+<td>0x1A</td>
+<td>__le16</td>
+<td>bg_inode_bitmap_csum_lo</td>
+<td>Lower 16-bits of the inode bitmap checksum.
+</td></tr>
+<tr>
+<td>0x1C</td>
+<td>__le16</td>
+<td>bg_itable_unused_lo</td>
+<td>Lower 16-bits of unused inode count.  If set, we needn't scan past the <code>(sb.s_inodes_per_group - gdt.bg_itable_unused)</code>th entry in the inode table for this group.
+</td></tr>
+<tr>
+<td>0x1E</td>
+<td>__le16</td>
+<td>bg_checksum</td>
+<td>Group descriptor checksum; crc16(sb_uuid+group+desc) if the RO_COMPAT_GDT_CSUM feature is set, or crc32c(sb_uuid+group_desc) &amp; 0xFFFF if the RO_COMPAT_METADATA_CSUM feature is set.
+</td></tr>
+<tr>
+<td colspan="4">These fields only exist if the 64bit feature is enabled and s_desc_size &gt; 32.
+</td></tr>
+<tr>
+<td>0x20</td>
+<td>__le32</td>
+<td>bg_block_bitmap_hi</td>
+<td>Upper 32-bits of location of block bitmap.
+</td></tr>
+<tr>
+<td>0x24</td>
+<td>__le32</td>
+<td>bg_inode_bitmap_hi</td>
+<td>Upper 32-bits of location of inodes bitmap.
+</td></tr>
+<tr>
+<td>0x28</td>
+<td>__le32</td>
+<td>bg_inode_table_hi</td>
+<td>Upper 32-bits of location of inodes table.
+</td></tr>
+<tr>
+<td>0x2C</td>
+<td>__le16</td>
+<td>bg_free_blocks_count_hi</td>
+<td>Upper 16-bits of free block count.
+</td></tr>
+<tr>
+<td>0x2E</td>
+<td>__le16</td>
+<td>bg_free_inodes_count_hi</td>
+<td>Upper 16-bits of free inode count.
+</td></tr>
+<tr>
+<td>0x30</td>
+<td>__le16</td>
+<td>bg_used_dirs_count_hi</td>
+<td>Upper 16-bits of directory count.
+</td></tr>
+<tr>
+<td>0x32</td>
+<td>__le16</td>
+<td>bg_itable_unused_hi</td>
+<td>Upper 16-bits of unused inode count.
+</td></tr>
+<tr>
+<td>0x34</td>
+<td>__le32</td>
+<td>bg_exclude_bitmap_hi</td>
+<td>Upper 32-bits of location of snapshot exclusion bitmap.
+</td></tr>
+<tr>
+<td>0x38</td>
+<td>__le16</td>
+<td>bg_block_bitmap_csum_hi</td>
+<td>Upper 16-bits of the block bitmap checksum.
+</td></tr>
+<tr>
+<td>0x3A</td>
+<td>__le16</td>
+<td>bg_inode_bitmap_csum_hi</td>
+<td>Upper 16-bits of the inode bitmap checksum.
+</td></tr>
+<tr>
+<td>0x3C</td>
+<td>__u32</td>
+<td>bg_reserved</td>
+<td>Padding to 64 bytes.
+</td></tr></tbody>
