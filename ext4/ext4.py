@@ -18,9 +18,10 @@ class ext4:
         """
         self.groupDescs = []
         #need to pull out the location first for speed purposes
-        descGroupHex = getLocation(0x40 * (self.superblock.desc_block_num), 0x1200) if self.superblock.s_feature_incompat_dict['INCOMPAT_64BIT'] == True else getLocation(0x20 * (self.superblock.desc_block_num), 0x1200)
+        #TODO: line will be buggy if superblock.block_size is <= 1024
+        descGroupHex = getLocation(0x40 * (self.superblock.desc_block_num), self.part_start+self.superblock.block_size) if self.superblock.s_feature_incompat_dict['INCOMPAT_64BIT'] == True else getLocation(0x20 * (self.superblock.desc_block_num), self.part_start+self.superblock.block_size)
         for groupDescInd in range(self.superblock.desc_block_num):
-            self.groupDescs.append((groupDescriptor.groupDescriptor(getHex(descGroupHex, 0x40*groupDescInd, 0x40+0x40*groupDescInd), self.superblock)) if self.superblock.s_feature_incompat_dict['INCOMPAT_64BIT'] == True else self.groupDescs.append(groupDescriptor.groupDescriptor(getHex(descGroupHex, 0x20*groupDescInd, 0x20+0x20*groupDescInd), self.superblock)))
+            self.groupDescs.append(groupDescriptor.groupDescriptor(getHex(descGroupHex, 0x40*groupDescInd, 0x40+0x40*groupDescInd), self.superblock)) if self.superblock.s_feature_incompat_dict['INCOMPAT_64BIT'] == True else self.groupDescs.append(groupDescriptor.groupDescriptor(getHex(descGroupHex, 0x20*groupDescInd, 0x20+0x20*groupDescInd), self.superblock))
 
 
     def __init__(self, part):
@@ -31,7 +32,7 @@ class ext4:
         print(self.superblock.block_size)
         print(self.superblock.desc_block_num)
 
-        print(self.groupDescs)
+        print(self.groupDescs[14].part)
         #TODO: Figure out where the first group descriptors are
 
 
