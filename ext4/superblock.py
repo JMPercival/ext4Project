@@ -233,7 +233,7 @@ class superblock:
             [7**x for x in range(1,int(ceil(log(self.desc_block_num,7))))])
         self.block_size = 1024 << self.s_log_block_size
         #if flex_bg is enabled
-        self.groups_in_flex = 2 ^ self.s_log_groups_per_flex
+        self.groups_in_flex = 2 ** self.s_log_groups_per_flex
 
         print('s_feature_compat')
         for x in self.s_feature_compat_dict:

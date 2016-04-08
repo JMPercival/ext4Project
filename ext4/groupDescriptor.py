@@ -21,21 +21,18 @@ class groupDescriptor:
 
 
         #These only exist if the partition is 64bit
-
-        #TODO: check if these should be here(64bit feature and s_desc_size>32)
-        self.bg_block_bitmap_hi= int(getHex(self.part, 0x20, 0x24, True), 16)#Upper 32-bits of location of block bitmap.
-        self.bg_inode_bitmap_hi= int(getHex(self.part, 0x24, 0x28, True), 16)#Upper 32-bits of location of inodes bitmap.
-        self.bg_inode_table_hi= int(getHex(self.part, 0x28, 0x2c, True), 16)#Upper 32-bits of location of inodes table.
-        self.bg_free_blocks_count_hi= int(getHex(self.part, 0x2C, 0x2e, True), 16)#Upper 16-bits of free block count.
-        self.bg_free_inodes_count_hi= int(getHex(self.part, 0x2E, 0x30, True), 16)#Upper 16-bits of free inode count.
-        self.bg_used_dirs_count_hi= int(getHex(self.part, 0x30, 0x32, True), 16)#Upper 16-bits of directory count.
-        self.bg_itable_unused_hi= int(getHex(self.part, 0x32, 0x34, True), 16)#Upper 16-bits of unused inode count.
-        self.bg_exclude_bitmap_hi= int(getHex(self.part, 0x34, 0x38, True), 16)#Upper 32-bits of location of snapshot exclusion bitmap.
-        self.bg_block_bitmap_csum_hi= int(getHex(self.part, 0x38, 0x3a, True), 16)#Upper 16-bits of the block bitmap checksum.
-        self.bg_inode_bitmap_csum_hi= int(getHex(self.part, 0x3A, 0x3c, True), 16)#Upper 16-bits of the inode bitmap checksum.
-
-
-        #Always at the end
-        self.bg_reserved= int(getHex(self.part, 0x3C, 0x40, False), 16)#Padding to 64 bytes.
-
+        if superblock.s_feature_incompat_dict['INCOMPAT_64BIT'] == True and superblock.s_desc_size > 32:
+            #TODO: check if these should be here(64bit feature and s_desc_size>32)
+            self.bg_block_bitmap_hi= int(getHex(self.part, 0x20, 0x24, True), 16)#Upper 32-bits of location of block bitmap.
+            self.bg_inode_bitmap_hi= int(getHex(self.part, 0x24, 0x28, True), 16)#Upper 32-bits of location of inodes bitmap.
+            self.bg_inode_table_hi= int(getHex(self.part, 0x28, 0x2c, True), 16)#Upper 32-bits of location of inodes table.
+            self.bg_free_blocks_count_hi= int(getHex(self.part, 0x2C, 0x2e, True), 16)#Upper 16-bits of free block count.
+            self.bg_free_inodes_count_hi= int(getHex(self.part, 0x2E, 0x30, True), 16)#Upper 16-bits of free inode count.
+            self.bg_used_dirs_count_hi= int(getHex(self.part, 0x30, 0x32, True), 16)#Upper 16-bits of directory count.
+            self.bg_itable_unused_hi= int(getHex(self.part, 0x32, 0x34, True), 16)#Upper 16-bits of unused inode count.
+            self.bg_exclude_bitmap_hi= int(getHex(self.part, 0x34, 0x38, True), 16)#Upper 32-bits of location of snapshot exclusion bitmap.
+            self.bg_block_bitmap_csum_hi= int(getHex(self.part, 0x38, 0x3a, True), 16)#Upper 16-bits of the block bitmap checksum.
+            self.bg_inode_bitmap_csum_hi= int(getHex(self.part, 0x3A, 0x3c, True), 16)#Upper 16-bits of the inode bitmap checksum.
+            self.bg_reserved= int(getHex(self.part, 0x3C, 0x40, False), 16)#Padding to 64 bytes.
+        
 
