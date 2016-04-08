@@ -6,28 +6,21 @@ import ext4.groupDescriptor as groupDescriptor
 
 
 class ext4:
-
-    def iterateFlexs(self):
-        pass
-
     #this is the lazy way of doing this, it will have to be upgraded to a generator later
     def buildGroupDescriptors(self):
         """
         Builds the group descriptors for the class. 
         Note: only uses the first Block. Needs to be expanded to check other blocks to make sure these are corrupted
 
-        Args: 
-        None
-        Return:
-        None
-        Creates:
-        self.groupDescs (A list of ext2.groupDescriptor)
+        Args: None
+        Return: None
+        Creates: self.groupDescs (A list of ext4.groupDescriptor)
         """
         self.groupDescs = []
         #need to pull out the location first for speed purposes
         descGroupHex = getLocation(0x40 * (self.superblock.desc_block_num), 0x1200) if self.superblock.s_feature_incompat_dict['INCOMPAT_64BIT'] == True else getLocation(0x20 * (self.superblock.desc_block_num), 0x1200)
         for groupDescInd in range(self.superblock.desc_block_num):
-            self.groupDescs.append(groupDescriptor.groupDescriptor(getHex(descGroupHex, 0x40*groupDescInd, 0x40+0x40*groupDescInd), self.superblock)) if self.superblock.s_feature_incompat_dict['INCOMPAT_64BIT'] == True else self.groupDescs.append(groupDescriptor.groupDescriptor(getHex(descGroupHex, 0x20*groupDescInd, 0x20+0x20*groupDescInd), self.superblock))
+            self.groupDescs.append((groupDescriptor.groupDescriptor(getHex(descGroupHex, 0x40*groupDescInd, 0x40+0x40*groupDescInd), self.superblock)) if self.superblock.s_feature_incompat_dict['INCOMPAT_64BIT'] == True else self.groupDescs.append(groupDescriptor.groupDescriptor(getHex(descGroupHex, 0x20*groupDescInd, 0x20+0x20*groupDescInd), self.superblock)))
 
 
     def __init__(self, part):
@@ -38,7 +31,7 @@ class ext4:
         print(self.superblock.block_size)
         print(self.superblock.desc_block_num)
 
-        print(self.groupDescs[7].bg_free_blocks_count_lo)
+        print(self.groupDescs)
         #TODO: Figure out where the first group descriptors are
 
 

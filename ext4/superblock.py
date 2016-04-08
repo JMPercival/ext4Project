@@ -226,6 +226,7 @@ class superblock:
         self.s_feature_ro_compat_def()
 
         ##MY VARS##
+        #TODO: This line below will probably bug the program if s_blocks_count_lo % s_blocks_per_group == 0... Probably better to ceil the result but its needs testing then
         self.desc_block_num=int(self.s_blocks_count_lo+(self.s_blocks_count_hi<<32) / self.s_blocks_per_group +1) if self.s_feature_incompat_dict['INCOMPAT_64BIT'] else int(self.s_blocks_count_lo / self.s_blocks_per_group +1)
         #if sparse_super is on
         self.desc_blocks_with_super = set([0,1]+[3**x for x in range(1,int(ceil(log(self.desc_block_num,3))))] +\
