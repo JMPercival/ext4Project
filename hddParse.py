@@ -26,7 +26,7 @@ class hddParse:
             tempPartFrame['size']=int(littleEndian(getHex(part,12,16)), 16)
             tempPartFrame['part_type']=partData.partition_type[getHex(part, 4)]
             self.partsFrame.append(tempPartFrame)
-        self.filesystem = ext4(self.partsFrame[1])
+        self.filesystem = ext4(self.partsFrame[0])
 
     def acceptUserInput(self):
         while(1):

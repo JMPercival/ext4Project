@@ -42,9 +42,9 @@ class ext4:
         self.block_bitmaps = []
         self.inode_bitmaps = []
         for groupDesc in self.groupDescs:
-            self.inode_tables_location_to_groups.append(self.part + (int(groupDesc.bg_inode_table,16) * self.sb.block_size))
-            self.inode_bitmaps.append(self.part + (int(groupDesc.bg_inode_table,16) * self.sb.block_size))
-            self.block_bitmaps.append(self.part + (int(groupDesc.bg_inode_table,16) * self.sb.block_size))
+            self.inode_tables_location_to_groups.append(self.part_start + groupDesc.bg_inode_table * self.superblock.block_size)
+            self.inode_bitmaps.append(self.part_start + groupDesc.bg_inode_table * self.superblock.block_size)
+            self.block_bitmaps.append(self.part_start + groupDesc.bg_inode_table * self.superblock.block_size)
 
     def __init__(self, part):
         self.part_start = part['start']*512
@@ -56,7 +56,9 @@ class ext4:
         print(self.superblock.block_size)
         print(self.superblock.desc_block_num)
 
-        print(self.groupDescs[14].part)
+
+        for x in self.inode_tables_location_to_groups:
+            print(x)
         #TODO: Figure out where the first group descriptors are
 
 
