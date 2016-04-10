@@ -34,5 +34,25 @@ class groupDescriptor:
             self.bg_block_bitmap_csum_hi= int(getHex(self.part, 0x38, 0x3a, True), 16)#Upper 16-bits of the block bitmap checksum.
             self.bg_inode_bitmap_csum_hi= int(getHex(self.part, 0x3A, 0x3c, True), 16)#Upper 16-bits of the inode bitmap checksum.
             self.bg_reserved= int(getHex(self.part, 0x3C, 0x40, False), 16)#Padding to 64 bytes.
-        
+
+            self.bg_block_bitmap = self.bg_block_bitmap_lo + (self.bg_block_bitmap_hi << 32)
+            self.bg_inode_bitmap = self.bg_inode_bitmap_lo + (self.bg_inode_bitmap_hi <<32)
+            self.bg_inode_table = self.bg_inode_table_lo + (self.bg_inode_table_hi<<32)
+            self.bg_free_blocks_count = self.bg_free_blocks_count_lo + (self.bg_free_blocks_count_hi<<16)
+            self.bg_free_inodes_count = self.bg_free_inodes_count_lo + (self.bg_free_inodes_count_hi<<16)
+            self.bg_used_dirs_count = self.bg_used_dirs_count_lo + (self.bg_used_dirs_count_hi<<16)
+            self.bg_exclude_bitmap = self.bg_exclude_bitmap_lo + (self.bg_exclude_bitmap_hi<<32)
+            self.bg_block_bitmap_csum = self.bg_block_bitmap_csum_lo + (self.bg_block_bitmap_csum_hi<<16)
+            self.bg_inode_bitmap_csum = self.bg_inode_bitmap_csum_lo + (self.bg_inode_bitmap_hi<<16)
+
+        else:
+            self.bg_block_bitmap = self.bg_block_bitmap_lo
+            self.bg_inode_bitmap = self.bg_inode_bitmap_lo
+            self.bg_inode_table = self.bg_inode_table_lo
+            self.bg_free_blocks_count = self.bg_free_blocks_count_lo
+            self.bg_free_inodes_count = self.bg_free_inodes_count_lo
+            self.bg_used_dirs_count = self.bg_used_dirs_count_lo
+            self.bg_exclude_bitmap = self.bg_exclude_bitmap_lo
+            self.bg_block_bitmap_csum = self.bg_block_bitmap_csum_lo
+            self.bg_inode_bitmap_csum = self.bg_inode_bitmap_csum_lo
 
