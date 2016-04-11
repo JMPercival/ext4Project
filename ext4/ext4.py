@@ -46,6 +46,17 @@ class ext4:
             self.inode_bitmaps.append(self.part_start + groupDesc.bg_inode_table * self.superblock.block_size)
             self.block_bitmaps.append(self.part_start + groupDesc.bg_inode_table * self.superblock.block_size)
 
+    def getInode(self, num):
+        num = num - 1 #there is not 0 inode so we shift what we asked for down to comply with FS
+        inode_block_group = int(num/int(self.sb.s_inodes_per_group,16))
+        inode_block_group_location = self.inode_tables_location_to_groups[inode_block_group]
+        inode_inside_block_group = int(num%int(self.sb.s_inodes_per_group,16))
+        inode_inside_block_group_location = inode_inside_block_group * int(self.sb.s_inode_size,16)
+        inode_final_location = int(inode_block_group_location + inode_inside_block_group_location)
+
+        newInode = inode.inode(getLocation(self.sb.s_inode_size, inode_final_location))
+        return newInode
+
     def __init__(self, part):
         self.part_start = part['start']*512
         self.superblock = superblock.superblock(getLocation(0x400, self.part_start + 0x400))
