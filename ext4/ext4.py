@@ -48,13 +48,13 @@ class ext4:
 
     def getInode(self, num):
         num = num - 1 #there is not 0 inode so we shift what we asked for down to comply with FS
-        inode_block_group = int(num/int(self.sb.s_inodes_per_group,16))
+        inode_block_group = int(num/self.superblock.s_inodes_per_group)
         inode_block_group_location = self.inode_tables_location_to_groups[inode_block_group]
-        inode_inside_block_group = int(num%int(self.sb.s_inodes_per_group,16))
-        inode_inside_block_group_location = inode_inside_block_group * int(self.sb.s_inode_size,16)
+        inode_inside_block_group = int(num%self.superblock.s_inodes_per_group)
+        inode_inside_block_group_location = inode_inside_block_group * self.superblock.s_inode_size
         inode_final_location = int(inode_block_group_location + inode_inside_block_group_location)
 
-        newInode = inode.inode(getLocation(self.sb.s_inode_size, inode_final_location))
+        newInode = inode.inode(getLocation(self.superblock.s_inode_size, inode_final_location), self.superblock)
         return newInode
 
     def __init__(self, part):
@@ -67,9 +67,20 @@ class ext4:
         print(self.superblock.block_size)
         print(self.superblock.desc_block_num)
 
+        print(self.getInode(1482).part)
+        print(len(self.getInode(12).part))
+        print(self.getInode(1482).i_flags_dict['EXT4_INDEX_FL'])
 
-        for x in self.inode_tables_location_to_groups:
-            print(x)
-        #TODO: Figure out where the first group descriptors are
+
+
+'''
+        for x in range(12, 2000):
+            print(hex(self.getInode(x).i_mode))
+            print(self.getInode(x).i_flags_dict['EXT4_INDEX_FL'])
+            if self.getInode(x).i_flags_dict['EXT4_INDEX_FL'] == True:
+                break
+'''
+
+
 
 
