@@ -39,7 +39,7 @@ class extent:
         #self.ext4_extent_class = []
         for entry_num in range(self.eh_entries):
             if self.eh_depth == 0:
-                self.ext4_extent_list.append(self.ext4_extent(getHex(self.part, entry_num*12 + 0xc, entry_num*12 + 0xc +0xc, False)))
+                self.ext4_extent_list.append(self.ext4_extent(getHex(self.part, entry_num*12 + 0xc, entry_num*12 + 0xc +0xc, False), superblock))
             else:
                 cur_idx = self.ext4_extent_idx(getHex(self.part, entry_num*12 + 0xc, entry_num*12 + 0xc +0xc, False))
                 #TODO: figure out what ext4_extent_idx.ei_block is/does
@@ -49,5 +49,5 @@ class extent:
 
         self.ext4_extent_list_ordered = []
         for extent_record in self.ext4_extent_list:
-            self.ext4_extent_list_ordered.append([extent_record.ee_block, extent_record.ee_len, entry_num.ee_start])
+            self.ext4_extent_list_ordered.append([extent_record.ee_block, extent_record.ee_len, extent_record.ee_start])
         sorted(self.ext4_extent_list_ordered, key=lambda extent_record: extent_record[0])

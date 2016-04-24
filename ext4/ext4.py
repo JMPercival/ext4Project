@@ -48,13 +48,8 @@ class ext4:
             self.block_bitmaps.append(self.part_start + groupDesc.bg_inode_table * self.superblock.block_size)
 
     def getInode(self, num):
-<<<<<<< HEAD
         num = num - 1 #there is not 0 inode so we shift what we asked for down to comply with FS
         inode_block_group = int(num/self.superblock.s_inodes_per_group)
-=======
-        num = num - 1 #there is no 0 inode so we shift what we asked for down to comply with FS
-        inode_block_group = int(num/int(self.sb.s_inodes_per_group,16))
->>>>>>> 410f621533dc0829d770bb7f99eaaaf9dc4d676d
         inode_block_group_location = self.inode_tables_location_to_groups[inode_block_group]
         inode_inside_block_group = int(num%self.superblock.s_inodes_per_group)
         inode_inside_block_group_location = inode_inside_block_group * self.superblock.s_inode_size
@@ -64,24 +59,25 @@ class ext4:
         return newInode
 
     def getDirectoryBlocks(self, inode):
-        inode_extent = extent(gethex(getHex(inode.part, 0x28, 0x64, False)))
+        inode_extent = extent.extent(getHex(inode.part, 0x28, 0x64, False), self.superblock, self.part_start)
         dir_list = ''
         for extent_record in inode_extent.ext4_extent_list_ordered:
             #TODO: work on initialized and uninitialized extent block
-            dir_list += getLocation(part_start + extent_record.ee_start * superblock.block_size, extent_record.ee_len * superblock.block_size)
+            dir_list += getLocation(extent_record[1] * self.superblock.block_size, self.part_start + extent_record[2] * self.superblock.block_size)
         return dir_list
 
     def buildDirectoryList(self, inode):
         directory_block = self.getDirectoryBlocks(inode)
         directoryList = []
 
+
         if inode.i_flags_dict['EXT4_INDEX_FL'] == False:
             count=0
-            while raw_block != '':
+            while directory_block != '':
                 count+=1
                 newDir = directory.directory(directory_block,self.superblock)
                 directoryList.append(newDir)
-                raw_block = raw_block[int(newDir.rec_len, 16)*2:]
+                directory_block = directory_block[int(newDir.rec_len, 16)*2:]
         else:
             #TODO: hash tree stuff here
             pass
@@ -102,18 +98,18 @@ class ext4:
         print(self.getInode(1482).part)
         print(len(self.getInode(12).part))
         print(self.getInode(1482).i_flags_dict['EXT4_INDEX_FL'])
+        thisInode = self.getInode(2)
+        print(self.buildDirectoryList(thisInode)[0].inode)
 
 
 
-'''
-        for x in range(12, 2000):
-            print(hex(self.getInode(x).i_mode))
-            print(self.getInode(x).i_flags_dict['EXT4_INDEX_FL'])
-            if self.getInode(x).i_flags_dict['EXT4_INDEX_FL'] == True:
-                break
-'''
+
+#        for x in range(12, 2000):
+#            print(hex(self.getInode(x).i_mode))
+#            print(self.getInode(x).i_flags_dict['EXT4_INDEX_FL'])
+#            if self.getInode(x).i_flags_dict['EXT4_INDEX_FL'] == True:
+#                break
 
 
-        print(self.buildDirectoryList(2))
 
 
