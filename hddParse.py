@@ -97,5 +97,5 @@ class hddParse:
         exit(0)
 
 start = hddParse()
-
+start.acceptUserInput()
 ##self.filesystem is the call to do stuff

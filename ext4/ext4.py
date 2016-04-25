@@ -1,3 +1,4 @@
+import partData
 from partHelp import *
 from sys import exit
 
@@ -66,21 +67,25 @@ class ext4:
             dir_list += getLocation(extent_record[1] * self.superblock.block_size, self.part_start + extent_record[2] * self.superblock.block_size)
         return dir_list
 
-    def buildDirectoryList(self, inode):
+    def getDirectoryList(self, inode):
         directory_block = self.getDirectoryBlocks(inode)
         directoryList = []
 
 
         if inode.i_flags_dict['EXT4_INDEX_FL'] == False:
-            count=0
-            while directory_block != '':
-                count+=1
-                newDir = directory.directory(directory_block,self.superblock)
-                directoryList.append(newDir)
-                directory_block = directory_block[int(newDir.rec_len, 16)*2:]
+            new_directory_block = directory_block
         else:
-            #TODO: hash tree stuff here
-            pass
+            #TODO: figure out how interior nodes are placed on FS
+            #TODO: add actual hashing like they do in the kernel rather than this linear search
+            new_directory_block = getHex(directory_block, 0, 0x18) + getHex(directory_block, 0x28+(8*int(getHex(directory_block,0x22, 0x24),16)), len(directory_block))
+
+        count=0
+        while directory_block != '':
+            count+=1
+            newDir = directory.directory(directory_block,self.superblock)
+            if newDir.inode != 0:
+                directoryList.append(newDir)
+            directory_block = directory_block[newDir.rec_len*2:]
 
         return directoryList
 
@@ -90,6 +95,9 @@ class ext4:
         self.superblock = superblock.superblock(getLocation(0x400, self.part_start + 0x400))
         self.buildGroupDescriptors()
         self.buildLocations()
+        root_directory_inode = self.getInode(2)
+        self.current_dir_list = self.getDirectoryList(root_directory_inode)
+
         print(self.inode_tables_location_to_groups)
         print(self.superblock.groups_in_flex)
         print(self.superblock.block_size)
@@ -102,13 +110,78 @@ class ext4:
         print(self.buildDirectoryList(thisInode)[0].inode)
 
 
+    #Here starts the things I can ask the filesystem after all this building
+    def userCD(self, dir):
+        if dir == '':
+            self.buildRootDir()
+            return 0 #operation successful return code
 
+        for dir_object in self.current_dir_list:
+            if dir == dir_object.decoded_name and dir_object.isFiletype() and partData.directory_type[dir_object.file_type] == 'Directory':
+                self.userCDSwitchDir(dir_object)
+                return 0 #operation successful return code
+            elif dir_object.isFiletype() == False:
+                return 1 #filetype operation not supported... your in trouble
+            elif dir == dir_object.decoded_name and dir_object.isFiletype() and partData.directory_type[dir_object.file_type] != 'Directory':
+                return 2 #Can not cd into file return code
+        return 3 #can not find file return code
 
-#        for x in range(12, 2000):
-#            print(hex(self.getInode(x).i_mode))
-#            print(self.getInode(x).i_flags_dict['EXT4_INDEX_FL'])
-#            if self.getInode(x).i_flags_dict['EXT4_INDEX_FL'] == True:
-#                break
+    def userCDSwitchDir(self, dir_object):
+        new_directory_inode = self.getInode(dir_object.inode)
+        self.current_dir_list = self.getDirectoryList(new_directory_inode)
+
+    def userLS(self, long=False, inode=False):
+        if long or inode:
+            for dir_object in self.current_dir_list:
+                if inode:
+                    print(dir_object.inode, end='\t')
+                if long:
+                    dir_object_inode = self.getInode(dir_object.inode)
+                    file_type = dir_object.file_type
+                    permission_bitmap = getBitmap(dir_object_inode.i_mode, 12)
+                    permission_string = 'x' if permission_bitmap[0] else '-'
+                    permission_string += 'w' if permission_bitmap[1] else '-'
+                    permission_string += 'r' if permission_bitmap[2] else '-'
+                    permission_string += 'x' if permission_bitmap[3] else '-'
+                    permission_string += 'w' if permission_bitmap[4] else '-'
+                    permission_string += 'r' if permission_bitmap[5] else '-'
+                    permission_string += 'x' if permission_bitmap[6] else '-'
+                    permission_string += 'w' if permission_bitmap[7] else '-'
+                    permission_string += 'r' if permission_bitmap[8] else '-'
+                    permission_string += partData.directory_type_letter[file_type]
+                    permission_string = permission_string[::-1]
+                    permission_string = list(permission_string)
+                    if permission_bitmap[9]:permission_string[0] = 'S'
+                    if permission_bitmap[10]:permission_string[4] = 'S'
+                    if permission_bitmap[11]:permission_string[1] = 'S'
+                    permission_string = ''.join(permission_string)
+                    uid = dir_object_inode.i_uid
+                    gid = dir_object_inode.i_gid
+                    size = dir_object_inode.i_size
+                    i_atime = dir_object_inode.i_atime_date.split()
+                    overall_time = ' '.join(i_atime[1:4])
+                    print('{0}\t{1}\t{2}\t{3}\t{4}\t'.format(permission_string, uid, gid, size, overall_time) ,end='')
+                print(dir_object.decoded_name)
+
+        else:
+            newline_counter = 0
+            for dir_object in self.current_dir_list:
+                if newline_counter >= 5:
+                    print('')
+                    newline_counter = 0
+                print(dir_object.decoded_name+'\t\t', end='')
+                newline_counter += 1
+            print('')
+
+    def userCAT(self, filename):
+        if filename == '':
+            return 'No Filename Given'
+
+        for dir_object in self.current_dir_list:
+            if filename == dir_object.decoded_name and dir_object.isFiletype() and partData.directory_type[dir_object.file_type] == 'Regular file':
+                data_encoded = self.getDirectoryBlocks(self.getInode(dir_object.inode))
+                data_decoded = ''.join([chr(int(data_encoded[c:c+2], 16)) for c in range(0,len(data_encoded),2)])
+                return data_decoded
 
 
 
