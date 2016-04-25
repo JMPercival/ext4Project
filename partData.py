@@ -27,3 +27,14 @@ directory_type_letter = {
     6:"s",
     7:"l"
 }
+
+directory_file_type =  {
+    0:"Unknown",
+    1:"Regular File",
+    2:"Directory",
+    3:"Character Device",
+    4:"Block Device",
+    5:"FIFO",
+    6:"Socket",
+    7:"Symbolic Link"
+}

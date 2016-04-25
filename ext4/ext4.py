@@ -137,7 +137,6 @@ class ext4:
             temp_dir_dict['inode'] = dir_object.inode
 
             dir_object_inode = self.getInode(dir_object.inode)
-            file_type = dir_object.file_type
             permission_bitmap = getBitmap(dir_object_inode.i_mode, 12)
             permission_string = 'x' if permission_bitmap[0] else '-'
             permission_string += 'w' if permission_bitmap[1] else '-'
@@ -148,7 +147,7 @@ class ext4:
             permission_string += 'x' if permission_bitmap[6] else '-'
             permission_string += 'w' if permission_bitmap[7] else '-'
             permission_string += 'r' if permission_bitmap[8] else '-'
-            permission_string += partData.directory_type_letter[file_type]
+            #permission_string += partData.directory_type_letter[dir_object.file_type]
             permission_string = permission_string[::-1]
             permission_string = list(permission_string)
             if permission_bitmap[9]:permission_string[0] = 'S'
@@ -157,13 +156,17 @@ class ext4:
             permission_string = ''.join(permission_string)
 
             temp_dir_dict['permission'] = permission_string
+            #TODO: this will fail if the filesystem does not use INCOMPAT_FILETYPE... Probably best to fix this later
+            temp_dir_dict['filetype'] = partData.directory_file_type[dir_object.file_type]
+
             temp_dir_dict['uid'] = dir_object_inode.i_uid
             temp_dir_dict['gid'] = dir_object_inode.i_gid
             temp_dir_dict['size'] = dir_object_inode.i_size
             i_atime = dir_object_inode.i_atime_date.split()
-            temp_dir_dict['overall_time'] = ' '.join(i_atime[1:4])
+            temp_dir_dict['access_time'] = ' '.join(i_atime[1:4])
             #print('{0}\t{1}\t{2}\t{3}\t{4}\t'.format(permission_string, uid, gid, size, overall_time) ,end='')
             temp_dir_dict['name'] = dir_object.decoded_name
+            temp_dir_dict['']
 
             dir_list.append(temp_dir_dict)
 
