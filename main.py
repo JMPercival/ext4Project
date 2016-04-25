@@ -31,6 +31,7 @@ class hddParse:
 
 
 import tkinter
+import tkinter.ttk as ttk
 class frontend(tkinter.Frame):
     def __init__(self, parent, fs):
         tkinter.Frame.__init__(self, parent)
@@ -69,24 +70,39 @@ class frontend(tkinter.Frame):
         
     def setupSelectButton(self):
         self.selectButton = tkinter.Button(self.parent, text='Select', underline=0, command=self.selection)
+
+    def setupTreeview(self):
+        self.tree = ttk.Treeview(self.parent)
+        self.tree['columns'] = ('name', 'permission')
+        self.tree.column('name', width=150)
+        self.tree.column('permission', width=100)
+        self.tree.heading('name', text='Name')
+        self.tree.heading('permission', text='Permissions')
+
+        for dir in fs.filesystem.userLS():
+            self.tree.insert("", tkinter.END, values=[dir['name'], dir['permission']])
+        
+
         
     def setupPacks(self):
         self.textbox.pack()
-        self.listbox.pack(fill=tkinter.BOTH)
+        #self.listbox.pack(fill=tkinter.BOTH)
+        self.tree.pack()
         self.selectButton.pack()
 
     def initUI(self):
         self.parent.title("EXT4 File Viewer")
         self.setupMenubar()
         self.setupEntry()
-        self.setupListbox()
+        #self.setupListbox()
         self.setupSelectButton()
+        self.setupTreeview()
         self.setupPacks()
 
     ##General Functions##
-    def addListToListbox(self, dir_list):
+    def addListToTree(self, dir_list):
         for dir in dirs:
-            self.listbox.insert(tkinter.END, dirs)
+            self.listbox.insert()
 
 
 

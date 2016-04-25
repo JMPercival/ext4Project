@@ -131,7 +131,7 @@ class ext4:
         self.current_dir_list = self.getDirectoryList(new_directory_inode)
 
     def userLS(self):
-        dir_dict = {}
+        dir_list = []
         for dir_object in self.current_dir_list:
             temp_dir_dict = {}
             temp_dir_dict['inode'] = dir_object.inode
@@ -156,7 +156,7 @@ class ext4:
             if permission_bitmap[11]:permission_string[1] = 'S'
             permission_string = ''.join(permission_string)
 
-            temp_dir_dict['permission_string'] = permission_string
+            temp_dir_dict['permission'] = permission_string
             temp_dir_dict['uid'] = dir_object_inode.i_uid
             temp_dir_dict['gid'] = dir_object_inode.i_gid
             temp_dir_dict['size'] = dir_object_inode.i_size
@@ -165,9 +165,9 @@ class ext4:
             #print('{0}\t{1}\t{2}\t{3}\t{4}\t'.format(permission_string, uid, gid, size, overall_time) ,end='')
             temp_dir_dict['name'] = dir_object.decoded_name
 
-            dir_dict.append(temp_dir_dict)
+            dir_list.append(temp_dir_dict)
 
-        return dir_dict
+        return dir_list
 
     def userCAT(self, filename):
         if filename == '':
