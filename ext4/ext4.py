@@ -107,7 +107,7 @@ class ext4:
         print(len(self.getInode(12).part))
         print(self.getInode(1482).i_flags_dict['EXT4_INDEX_FL'])
         thisInode = self.getInode(2)
-        print(self.buildDirectoryList(thisInode)[0].inode)
+        print(self.getDirectoryList(thisInode)[0].inode)
 
 
     #Here starts the things I can ask the filesystem after all this building

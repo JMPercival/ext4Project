@@ -4,6 +4,7 @@ from partHelp import *
 class directory:
     def __init__(self, part, superblock):
         self.part = part
+        self.superblock = superblock
         self.inode= int(getHex(self.part, 0x0, 0x4, True),16)#Inode
         self.rec_len= int(getHex(self.part, 0x4, 0x6, True),16)#Total size of this entry (Including all subfields)
         if superblock.s_feature_incompat_dict['INCOMPAT_FILETYPE'] == True:
@@ -17,7 +18,7 @@ class directory:
 
 
     def isFiletype(self):
-        return True if s_feature_incompat_dict['INCOMPAT_FILETYPE'] == True else False
+        return self.superblock.s_feature_incompat_dict['INCOMPAT_FILETYPE']
 
     def __hash__(self):
         return hash((self.name,self.inode))
