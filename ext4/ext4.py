@@ -4,7 +4,8 @@ from sys import exit
 import ext4.superblock as superblock
 import ext4.groupDescriptor as groupDescriptor
 import ext4.inode as inode
-
+import ext4.extent as extent
+import ext4.directory as directory
 
 class ext4:
     #this is the lazy way of doing this, it will have to be upgraded to a generator later
@@ -47,7 +48,7 @@ class ext4:
             self.block_bitmaps.append(self.part_start + groupDesc.bg_inode_table * self.superblock.block_size)
 
     def getInode(self, num):
-        num = num - 1 #there is not 0 inode so we shift what we asked for down to comply with FS
+        num = num - 1 #there is no 0 inode so we shift what we asked for down to comply with FS
         inode_block_group = int(num/int(self.sb.s_inodes_per_group,16))
         inode_block_group_location = self.inode_tables_location_to_groups[inode_block_group]
         inode_inside_block_group = int(num%int(self.sb.s_inodes_per_group,16))
@@ -56,6 +57,32 @@ class ext4:
 
         newInode = inode.inode(getLocation(self.sb.s_inode_size, inode_final_location))
         return newInode
+
+    def getDirectoryBlocks(self, inode):
+        inode_extent = extent(gethex(getHex(inode.part, 0x28, 0x64, False)))
+        dir_list = ''
+        for extent_record in inode_extent.ext4_extent_list_ordered:
+            #TODO: work on initialized and uninitialized extent block
+            dir_list += getLocation(part_start + extent_record.ee_start * superblock.block_size, extent_record.ee_len * superblock.block_size)
+        return dir_list
+
+    def buildDirectoryList(self, inode):
+        directory_block = self.getDirectoryBlocks(inode)
+        directoryList = []
+
+        if inode.i_flags_dict['EXT4_INDEX_FL'] == False:
+            count=0
+            while raw_block != '':
+                count+=1
+                newDir = directory.directory(directory_block,self.superblock)
+                directoryList.append(newDir)
+                raw_block = raw_block[int(newDir.rec_len, 16)*2:]
+        else:
+            #TODO: hash tree stuff here
+            pass
+
+        return directoryList
+
 
     def __init__(self, part):
         self.part_start = part['start']*512
@@ -68,8 +95,6 @@ class ext4:
         print(self.superblock.desc_block_num)
 
 
-        for x in self.inode_tables_location_to_groups:
-            print(x)
-        #TODO: Figure out where the first group descriptors are
+        print(self.buildDirectoryList(2))
 
 
