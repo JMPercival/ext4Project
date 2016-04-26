@@ -130,48 +130,44 @@ class ext4:
         new_directory_inode = self.getInode(dir_object.inode)
         self.current_dir_list = self.getDirectoryList(new_directory_inode)
 
-    def userLS(self, long=False, inode=False):
-        if long or inode:
-            for dir_object in self.current_dir_list:
-                if inode:
-                    print(dir_object.inode, end='\t')
-                if long:
-                    dir_object_inode = self.getInode(dir_object.inode)
-                    file_type = dir_object.file_type
-                    permission_bitmap = getBitmap(dir_object_inode.i_mode, 12)
-                    permission_string = 'x' if permission_bitmap[0] else '-'
-                    permission_string += 'w' if permission_bitmap[1] else '-'
-                    permission_string += 'r' if permission_bitmap[2] else '-'
-                    permission_string += 'x' if permission_bitmap[3] else '-'
-                    permission_string += 'w' if permission_bitmap[4] else '-'
-                    permission_string += 'r' if permission_bitmap[5] else '-'
-                    permission_string += 'x' if permission_bitmap[6] else '-'
-                    permission_string += 'w' if permission_bitmap[7] else '-'
-                    permission_string += 'r' if permission_bitmap[8] else '-'
-                    permission_string += partData.directory_type_letter[file_type]
-                    permission_string = permission_string[::-1]
-                    permission_string = list(permission_string)
-                    if permission_bitmap[9]:permission_string[0] = 'S'
-                    if permission_bitmap[10]:permission_string[4] = 'S'
-                    if permission_bitmap[11]:permission_string[1] = 'S'
-                    permission_string = ''.join(permission_string)
-                    uid = dir_object_inode.i_uid
-                    gid = dir_object_inode.i_gid
-                    size = dir_object_inode.i_size
-                    i_atime = dir_object_inode.i_atime_date.split()
-                    overall_time = ' '.join(i_atime[1:4])
-                    print('{0}\t{1}\t{2}\t{3}\t{4}\t'.format(permission_string, uid, gid, size, overall_time) ,end='')
-                print(dir_object.decoded_name)
+    def userLS(self):
+        dir_dict = {}
+        for dir_object in self.current_dir_list:
+            temp_dir_dict = {}
+            temp_dir_dict['inode'] = dir_object.inode
 
-        else:
-            newline_counter = 0
-            for dir_object in self.current_dir_list:
-                if newline_counter >= 5:
-                    print('')
-                    newline_counter = 0
-                print(dir_object.decoded_name+'\t\t', end='')
-                newline_counter += 1
-            print('')
+            dir_object_inode = self.getInode(dir_object.inode)
+            file_type = dir_object.file_type
+            permission_bitmap = getBitmap(dir_object_inode.i_mode, 12)
+            permission_string = 'x' if permission_bitmap[0] else '-'
+            permission_string += 'w' if permission_bitmap[1] else '-'
+            permission_string += 'r' if permission_bitmap[2] else '-'
+            permission_string += 'x' if permission_bitmap[3] else '-'
+            permission_string += 'w' if permission_bitmap[4] else '-'
+            permission_string += 'r' if permission_bitmap[5] else '-'
+            permission_string += 'x' if permission_bitmap[6] else '-'
+            permission_string += 'w' if permission_bitmap[7] else '-'
+            permission_string += 'r' if permission_bitmap[8] else '-'
+            permission_string += partData.directory_type_letter[file_type]
+            permission_string = permission_string[::-1]
+            permission_string = list(permission_string)
+            if permission_bitmap[9]:permission_string[0] = 'S'
+            if permission_bitmap[10]:permission_string[4] = 'S'
+            if permission_bitmap[11]:permission_string[1] = 'S'
+            permission_string = ''.join(permission_string)
+
+            temp_dir_dict['permission_string'] = permission_string
+            temp_dir_dict['uid'] = dir_object_inode.i_uid
+            temp_dir_dict['gid'] = dir_object_inode.i_gid
+            temp_dir_dict['size'] = dir_object_inode.i_size
+            i_atime = dir_object_inode.i_atime_date.split()
+            temp_dir_dict['overall_time'] = ' '.join(i_atime[1:4])
+            #print('{0}\t{1}\t{2}\t{3}\t{4}\t'.format(permission_string, uid, gid, size, overall_time) ,end='')
+            temp_dir_dict['name'] = dir_object.decoded_name
+
+            dir_dict.append(temp_dir_dict)
+
+        return dir_dict
 
     def userCAT(self, filename):
         if filename == '':
