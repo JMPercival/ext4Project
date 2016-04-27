@@ -1,4 +1,5 @@
 import binascii
+import partData
 from subprocess import Popen, PIPE, run
 from time import sleep
 from struct import unpack
@@ -21,17 +22,7 @@ def getHex(hexStr, start, end='', le=False):
 def getLocation(count, skip): #TODO: Add functionality to pass in the HDD I am looking at
 	#hard coded as ext2Copy currently
 	#bs is currently 1 because it lets me just around easier in the hard drive
-    '''
-    #old code that is now buggy, I am replacing it with a non-file based approach
-    pro = Popen(['dd', 'if=ext2Copy', 'of=tmpfileForData', 'bs=1', 'count='+str(count), 'skip='+str(skip)], stderr=PIPE) #change this to take an input
-    while pro.poll == None:
-        sleep(.3)
-    sleep(1)
-
-    myoutput = open('tmpfileForData', 'rb')
-    hexStr = binascii.hexlify(myoutput.read())
-    '''
-    pro = run(['dd', 'if=my_drive', 'bs=1', 'count='+str(count), 'skip='+str(skip)], stderr=PIPE, stdout=PIPE)
+    pro = run(['dd', 'if='+partData.drive_to_use, 'bs=1', 'count='+str(count), 'skip='+str(skip)], stderr=PIPE, stdout=PIPE)
     #TODO: should probably raise an exception here if stderr flags is something important
     #print(type(pro.stdout))
     #hexStr = map(hex, map(ord, bytearray(pro.stdout)))

@@ -131,21 +131,25 @@ class frontend(tkinter.Frame):
             self.file_values_to_show += ['permission']
             self.tree.column('permission', width=100)
             self.tree.heading('permission', text='Permissions')
-
         if self.UID_checkbox.get():
-            self.file_values_to_show += ['']
-            self.tree.column('permission', width=100)
-            self.tree.heading('permission', text='Permissions')
-
+            self.file_values_to_show += ['uid']
+            self.tree.column('uid', width=100)
+            self.tree.heading('uid', text='UID')
         if self.GID_checkbox.get():
+            self.file_values_to_show += ['gid']
+            self.tree.column('gid', width=100)
+            self.tree.heading('gid', text='GID')
         if self.size_checkbox.get():
+            self.file_values_to_show += ['size']
+            self.tree.column('size', width=100)
+            self.tree.heading('size', text='Size')
         if self.access_time_checkbox.get():
-
+            self.file_values_to_show += ['access_time']
+            self.tree.column('access_time', width=100)
+            self.tree.heading('access_time', text='Access_Time')
 
         self.scrollbary.config(command=self.tree.yview)
         self.scrollbarx.config(command=self.tree.xview)
-
-
 
         tag_to_use = 'greenTag'
         for dir in fs.filesystem.userLS():

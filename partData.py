@@ -38,3 +38,4 @@ directory_file_type =  {
     6:"Socket",
     7:"Symbolic Link"
 }
+
