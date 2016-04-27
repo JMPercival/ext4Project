@@ -111,6 +111,9 @@ class ext4:
 
 
     #Here starts the things I can ask the filesystem after all this building
+    def userLoadDir(self, inode_num):
+        return self.userLS(self.getDirectoryList(self.getInode(int(inode_num))))
+
     def userCD(self, dir):
         if dir == '':
             self.buildRootDir()
@@ -130,9 +133,15 @@ class ext4:
         new_directory_inode = self.getInode(dir_object.inode)
         self.current_dir_list = self.getDirectoryList(new_directory_inode)
 
-    def userLS(self):
+    def userLS(self, dir_object_list=''):
+        dir_list_to_iter = []
+        if dir_object_list == '':
+            dir_list_to_iter = self.current_dir_list
+        else:
+            dir_list_to_iter = dir_object_list
+
         dir_list = []
-        for dir_object in self.current_dir_list:
+        for dir_object in dir_list_to_iter:
             temp_dir_dict = {}
             temp_dir_dict['inode'] = dir_object.inode
 
@@ -166,22 +175,16 @@ class ext4:
             temp_dir_dict['access_time'] = ' '.join(i_atime[1:4])
             #print('{0}\t{1}\t{2}\t{3}\t{4}\t'.format(permission_string, uid, gid, size, overall_time) ,end='')
             temp_dir_dict['name'] = dir_object.decoded_name
-            temp_dir_dict['']
 
             dir_list.append(temp_dir_dict)
 
         return dir_list
 
-    def userCAT(self, filename):
-        if filename == '':
-            return 'No Filename Given'
-
-        for dir_object in self.current_dir_list:
-            if filename == dir_object.decoded_name and dir_object.isFiletype() and partData.directory_type[dir_object.file_type] == 'Regular file':
-                data_encoded = self.getDirectoryBlocks(self.getInode(dir_object.inode))
-                data_decoded = ''.join([chr(int(data_encoded[c:c+2], 16)) for c in range(0,len(data_encoded),2)])
-                return data_decoded
-
+    def userCAT(self, inode_num):
+        inode_num = int(inode_num)
+        data_encoded = self.getDirectoryBlocks(self.getInode(inode_num))
+        data_decoded = ''.join([chr(int(data_encoded[c:c+2], 16)) for c in range(0, len(data_encoded), 2)])
+        return data_decoded
 
 
 
