@@ -38,7 +38,7 @@ class frontend(tkinter.Frame):
     def __init__(self, parent):
         #temp values til it can be set in box
         self.filesystem_to_use = 'my_drive'
-        self.partition_to_use = 1
+        self.partition_to_use = 0
         self.fs = hddParse(self.filesystem_to_use, self.partition_to_use)
         tkinter.Frame.__init__(self, parent)
         self.parent = parent
