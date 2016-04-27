@@ -190,16 +190,20 @@ class ext4:
     def getSuperblockVars(self):
         varString = ''
         for key in self.superblock.__dict__.keys():
-            varString += key + ": " + self.superblock.__dict__[key] + '\n'
+            if key == 'superblock' or key == 'part':
+                continue
+            varString += key + ": " + str(self.superblock.__dict__[key]) + '\n'
         return varString
 
     def getGroupDescVars(self):
         varString = ''
         count = 0
         for groupDesc in self.groupDescs:
-            varString += 'Group Descriptor #'+count+':\n'
+            varString += 'Group Descriptor #'+str(count)+':\n'
             count += 1
-            for key in self.groupDesc.__dict__.keys():
-                varString += key + ": " + self.groupDesc.__dict__[key] + '\n'
+            for key in groupDesc.__dict__.keys():
+                if key =='part':
+                    continue
+                varString += key + ": " + str(groupDesc.__dict__[key]) + '\n'
             varString += '\n\n'
         return varString

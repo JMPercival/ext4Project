@@ -112,7 +112,7 @@ class frontend(tkinter.Frame):
         text.pack(fill=tkinter.BOTH, expand=True)
 
 
-    def detailGroupDescsWindow(self):
+    def detailGroupDescWindow(self):
         self.group_desc_detail_slave_window = tkinter.Toplevel(self)
         self.group_desc_detail_slave_window.wm_title("Superblock Detail")
 
