@@ -38,7 +38,7 @@ class frontend(tkinter.Frame):
     def __init__(self, parent):
         #temp values til it can be set in box
         self.filesystem_to_use = 'my_drive'
-        self.partition_to_use = 0
+        self.partition_to_use = 1
         self.fs = hddParse(self.filesystem_to_use, self.partition_to_use)
         tkinter.Frame.__init__(self, parent)
         self.parent = parent
@@ -65,10 +65,16 @@ class frontend(tkinter.Frame):
         self.setupTreeview()
         self.tree.pack(fill=tkinter.BOTH, expand=True, side=tkinter.TOP)
 
+    def reloadFilesystem(self):
+        self.fs = hddParse(self.filesystem_to_use, self.partition_to_use)
+        self.reload_tree()
+
     def getNewFilesystemSettings(self):
         self.filesystem_to_use = self.filesystem_entry.get()
-        self.partition_to_use = int(self.partition_to_use)
+        self.partition_to_use = int(self.partition_to_use_internal.get())
         self.filesystem_config_slave_window.destroy()
+        
+        self.reloadFilesystem()
 
     def configureFilesystem(self):
         self.filesystem_config_slave_window = tkinter.Toplevel(self)
@@ -76,8 +82,10 @@ class frontend(tkinter.Frame):
         self.filesystem_config_slave_window.wm_title("Filesystem Config")
 
         self.filesystem_entry = tkinter.Entry(self.filesystem_config_slave_window)
+        self.filesystem_entry.insert(tkinter.INSERT, self.filesystem_to_use)
+
         self.partition_to_use_internal = tkinter.StringVar()
-        self.partition_to_use_internal.set('0')
+        self.partition_to_use_internal.set(self.partition_to_use)
         self.dropdown = tkinter.OptionMenu(self.filesystem_config_slave_window,self.partition_to_use_internal,'0','1','2','3')
 
         filesystem_label = tkinter.Label(self.filesystem_config_slave_window, text="Filesystem to use:")
@@ -86,12 +94,12 @@ class frontend(tkinter.Frame):
         done_button = tkinter.Button(self.filesystem_config_slave_window, text = 'Done', command=self.getNewFilesystemSettings)
 
         filesystem_label.pack(side=tkinter.TOP, anchor=tkinter.W)
-        self.filesystem_entry.pack(side=tkinter.TOP)
+        self.filesystem_entry.pack(side=tkinter.TOP, anchor=tkinter.W)
 
         dropdown_label.pack(side=tkinter.TOP, anchor=tkinter.W)
-        dropdown.pack(side=tkinter.TOP)
+        self.dropdown.pack(side=tkinter.TOP, anchor=tkinter.W)
 
-        done_button.pack(side=tkinter.TOP)
+        done_button.pack(side=tkinter.TOP, anchor=tkinter.W)
 
 
     ##UI Setup##
