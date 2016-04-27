@@ -122,10 +122,10 @@ class superblock:
         self.s_feature_ro_compat_dict['RO_COMPAT_READONLY'] = bitmap[12]
 
 
-    def __init__(self, part):
+    def __init__(self, part, filesystem_to_use):
         self.superblock = part
         self.part = part
-
+        self.filesystem_to_use = filesystem_to_use
 
         #####################################################################
         #All entires below have been scraped from the ext4 wiki then changed#

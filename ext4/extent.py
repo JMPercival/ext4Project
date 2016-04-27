@@ -43,7 +43,7 @@ class extent:
             else:
                 cur_idx = self.ext4_extent_idx(getHex(self.part, entry_num*12 + 0xc, entry_num*12 + 0xc +0xc, False))
                 #TODO: figure out what ext4_extent_idx.ei_block is/does
-                cur_new_class = extent(getLocation(superblock.block_size, part_start +cur_idx.ei_leaf * superblock.block_size, superblock), superblock, part_start)
+                cur_new_class = extent(getLocation(superblock.block_size, part_start +cur_idx.ei_leaf * superblock.block_size, superblock.filesystem_to_use), superblock, part_start)
                 self.ext4_extent_list += cur_new_class.ext4_extent_list
                 #self.ext4_extent_class.append(cur_new_class)
 

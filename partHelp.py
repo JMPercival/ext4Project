@@ -19,10 +19,10 @@ def getHex(hexStr, start, end='', le=False):
 	else:
 		return littleEndian(hexStr[start * 2 : end * 2])
 
-def getLocation(count, skip): #TODO: Add functionality to pass in the HDD I am looking at
+def getLocation(count, skip, filesystem_to_use='my_drive'): #TODO: Check this is a valid filesystem before blindly using?
 	#hard coded as ext2Copy currently
 	#bs is currently 1 because it lets me just around easier in the hard drive
-    pro = run(['dd', 'if='+partData.drive_to_use, 'bs=1', 'count='+str(count), 'skip='+str(skip)], stderr=PIPE, stdout=PIPE)
+    pro = run(['dd', 'if='+ filesystem_to_use, 'bs=1', 'count='+str(count), 'skip='+str(skip)], stderr=PIPE, stdout=PIPE)
     #TODO: should probably raise an exception here if stderr flags is something important
     #print(type(pro.stdout))
     #hexStr = map(hex, map(ord, bytearray(pro.stdout)))

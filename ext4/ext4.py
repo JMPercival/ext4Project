@@ -23,7 +23,7 @@ class ext4:
         #need to pull out the location first for speed purposes
         #TODO: line will be buggy if superblock.block_size is <= 1024
         #TODO: also, 0x40 needs to be replaced with superblock.s_desc_size instead of being hard coded
-        descGroupHex = getLocation(0x40 * (self.superblock.desc_block_num), self.part_start+self.superblock.block_size) if self.superblock.s_feature_incompat_dict['INCOMPAT_64BIT'] == True else getLocation(0x20 * (self.superblock.desc_block_num), self.part_start+self.superblock.block_size)
+        descGroupHex = getLocation(0x40 * (self.superblock.desc_block_num), self.part_start+self.superblock.block_size, self.filesystem_to_use) if self.superblock.s_feature_incompat_dict['INCOMPAT_64BIT'] == True else getLocation(0x20 * (self.superblock.desc_block_num), self.part_start+self.superblock.block_size, self.filesystem_to_use)
         for groupDescInd in range(self.superblock.desc_block_num):
             self.groupDescs.append(groupDescriptor.groupDescriptor(getHex(descGroupHex, 0x40*groupDescInd, 0x40+0x40*groupDescInd), self.superblock)) if self.superblock.s_feature_incompat_dict['INCOMPAT_64BIT'] == True else self.groupDescs.append(groupDescriptor.groupDescriptor(getHex(descGroupHex, 0x20*groupDescInd, 0x20+0x20*groupDescInd), self.superblock))
 
@@ -56,7 +56,7 @@ class ext4:
         inode_inside_block_group_location = inode_inside_block_group * self.superblock.s_inode_size
         inode_final_location = int(inode_block_group_location + inode_inside_block_group_location)
 
-        newInode = inode.inode(getLocation(self.superblock.s_inode_size, inode_final_location), self.superblock)
+        newInode = inode.inode(getLocation(self.superblock.s_inode_size, inode_final_location, self.filesystem_to_use), self.superblock)
         return newInode
 
     def getDirectoryBlocks(self, inode):
@@ -64,7 +64,7 @@ class ext4:
         dir_list = ''
         for extent_record in inode_extent.ext4_extent_list_ordered:
             #TODO: work on initialized and uninitialized extent block
-            dir_list += getLocation(extent_record[1] * self.superblock.block_size, self.part_start + extent_record[2] * self.superblock.block_size)
+            dir_list += getLocation(extent_record[1] * self.superblock.block_size, self.part_start + extent_record[2] * self.superblock.block_size, self.filesystem_to_use)
         return dir_list
 
     def getDirectoryList(self, inode):
@@ -90,9 +90,10 @@ class ext4:
         return directoryList
 
 
-    def __init__(self, part):
+    def __init__(self, part, filesystem_to_use):
+        self.filesystem_to_use = filesystem_to_use
         self.part_start = part['start']*512
-        self.superblock = superblock.superblock(getLocation(0x400, self.part_start + 0x400))
+        self.superblock = superblock.superblock(getLocation(0x400, self.part_start + 0x400, self.filesystem_to_use), self.filesystem_to_use)
         self.buildGroupDescriptors()
         self.buildLocations()
         root_directory_inode = self.getInode(2)

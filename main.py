@@ -4,7 +4,7 @@ from ext4.ext4 import ext4
 from sys import exit
 
 class hddParse:
-    def __init__(self):
+    def __init__(self, filesystem_to_use, partition_to_use):
         ##
         # MBR partioning:
         #	part 1: 446 (16 bytes)
@@ -16,7 +16,7 @@ class hddParse:
         self.partsFrame = []
         #iterate the 4 partitions and push the bytes into parts
         #TODO: add ability to parse extended partitions
-        hexStr = getLocation(512, 0)
+        hexStr = getLocation(512, 0, filesystem_to_use)
         for x in range(446,446+(16*4),16):
             self.parts.append(getHex(hexStr, x, x+16))
         for index, part in enumerate(self.parts):
@@ -26,7 +26,8 @@ class hddParse:
             tempPartFrame['size']=int(littleEndian(getHex(part,12,16)), 16)
             tempPartFrame['part_type']=partData.partition_type[getHex(part, 4)]
             self.partsFrame.append(tempPartFrame)
-        self.filesystem = ext4(self.partsFrame[0])
+
+        self.filesystem = ext4(self.partsFrame[partition_to_use], filesystem_to_use)
 
 
 
@@ -34,7 +35,11 @@ import tkinter
 import tkinter.ttk as ttk
 import random
 class frontend(tkinter.Frame):
-    def __init__(self, parent, fs):
+    def __init__(self, parent):
+        #temp values til it can be set in box
+        self.filesystem_to_use = 'my_drive'
+        self.partition_to_use = 0
+        self.fs = hddParse(self.filesystem_to_use, self.partition_to_use)
         tkinter.Frame.__init__(self, parent)
         self.parent = parent
         self.fs = fs
@@ -182,6 +187,7 @@ class frontend(tkinter.Frame):
         #self.selectButton.pack()
 
     def initUI(self):
+        self.filesystem_to_use = 'my_drive'
         self.file_values_to_show = ['name', 'inode', 'filetype']
         self.depth = 0
         self.cat_window_up = 0
@@ -270,9 +276,8 @@ class frontend(tkinter.Frame):
 
 
 if __name__ == '__main__':
-    fs = hddParse()
     master=tkinter.Tk()
     #master.geometry('250x150+300+300')
-    app = frontend(master, fs)
+    app = frontend(master)
     master.mainloop()
 ##self.filesystem is the call to do stuff
