@@ -78,7 +78,6 @@ class frontend(tkinter.Frame):
 
     def configureFilesystem(self):
         self.filesystem_config_slave_window = tkinter.Toplevel(self)
-        #self.filesystem_config_slave_window.protocol("WM_DELETE_WINDOW", self.cat_window_delete)
         self.filesystem_config_slave_window.wm_title("Filesystem Config")
 
         self.filesystem_entry = tkinter.Entry(self.filesystem_config_slave_window)
@@ -101,6 +100,28 @@ class frontend(tkinter.Frame):
 
         done_button.pack(side=tkinter.TOP, anchor=tkinter.W)
 
+    def detailSuperblockWindow(self):
+        self.superblock_detail_slave_window = tkinter.Toplevel(self)
+        self.superblock_detail_slave_window.wm_title("Superblock Detail")
+
+        text = tkinter.Text(self.superblock_detail_slave_window)
+
+        info = self.fs.filesystem.getSuperblockVars()
+
+        text.insert(tkinter.INSERT, info)
+        text.pack(fill=tkinter.BOTH, expand=True)
+
+
+    def detailGroupDescsWindow(self):
+        self.group_desc_detail_slave_window = tkinter.Toplevel(self)
+        self.group_desc_detail_slave_window.wm_title("Superblock Detail")
+
+        text = tkinter.Text(self.group_desc_detail_slave_window)
+
+        info = self.fs.filesystem.getGroupDescVars()
+        
+        text.insert(tkinter.INSERT, info)
+        text.pack(fill=tkinter.BOTH, expand=True)
 
     ##UI Setup##
     def setupMenubar(self):
@@ -127,9 +148,13 @@ class frontend(tkinter.Frame):
         columnMenu.add_checkbutton(label='GID', onvalue=True, offvalue=False, variable=self.GID_checkbox)
         columnMenu.add_checkbutton(label='Size', onvalue=True, offvalue=False, variable=self.size_checkbox)
         columnMenu.add_checkbutton(label='Access_Time', onvalue=True, offvalue=False, variable=self.access_time_checkbox)
-        columnMenu.add_command(label='Reload Tree', command=self.reload_tree)
+        columnMenu.add_command(label='Apply New Columns', command=self.reload_tree)
         menubar.add_cascade(label='Columns', menu=columnMenu)
 
+        detailMenu = tkinter.Menu(menubar)
+        detailMenu.add_command(label='Superblock', command=self.detailSuperblockWindow)
+        detailMenu.add_command(label='Group Descriptors', command=self.detailGroupDescWindow)
+        menubar.add_cascade(label='Details', menu=detailMenu)
 
     def setupEntry(self):
         self.textbox = tkinter.Entry(self.parent)

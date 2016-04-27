@@ -187,5 +187,19 @@ class ext4:
         data_decoded = ''.join([chr(int(data_encoded[c:c+2], 16)) for c in range(0, len(data_encoded), 2)])
         return data_decoded
 
+    def getSuperblockVars(self):
+        varString = ''
+        for key in self.superblock.__dict__.keys():
+            varString += key + ": " + self.superblock.__dict__[key] + '\n'
+        return varString
 
-
+    def getGroupDescVars(self):
+        varString = ''
+        count = 0
+        for groupDesc in self.groupDescs:
+            varString += 'Group Descriptor #'+count+':\n'
+            count += 1
+            for key in self.groupDesc.__dict__.keys():
+                varString += key + ": " + self.groupDesc.__dict__[key] + '\n'
+            varString += '\n\n'
+        return varString
