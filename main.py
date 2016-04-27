@@ -42,7 +42,6 @@ class frontend(tkinter.Frame):
         self.fs = hddParse(self.filesystem_to_use, self.partition_to_use)
         tkinter.Frame.__init__(self, parent)
         self.parent = parent
-        self.fs = fs
 
         self.initUI()
 
@@ -66,6 +65,9 @@ class frontend(tkinter.Frame):
         self.setupTreeview()
         self.tree.pack(fill=tkinter.BOTH, expand=True, side=tkinter.TOP)
 
+    def configureFilesystem(self):
+        pass
+
     ##UI Setup##
     def setupMenubar(self):
         menubar = tkinter.Menu(self.parent)
@@ -74,6 +76,10 @@ class frontend(tkinter.Frame):
         fileMenu = tkinter.Menu(menubar)
         fileMenu.add_command(label='Exit', command=self.onExit)
         menubar.add_cascade(label='File',menu=fileMenu)
+
+        configMenu = tkinter.Menu(menubar)
+        configMenu.add_command(label='Filesystem', command=self.configureFilesystem)
+        menubar.add_cascade(label='Configure', menu=configMenu)
         
         self.UID_checkbox = tkinter.BooleanVar()
         self.GID_checkbox = tkinter.BooleanVar()
@@ -96,7 +102,7 @@ class frontend(tkinter.Frame):
 
     def setupListbox(self):
         self.listbox = tkinter.Listbox(self.parent)
-        for dir in fs.filesystem.current_dir_list:
+        for dir in self.fs.filesystem.current_dir_list:
             self.listbox.insert(tkinter.END, dir)
         
     def setupSelectButton(self):
@@ -157,7 +163,7 @@ class frontend(tkinter.Frame):
         self.scrollbarx.config(command=self.tree.xview)
 
         tag_to_use = 'greenTag'
-        for dir in fs.filesystem.userLS():
+        for dir in self.fs.filesystem.userLS():
             if dir['inode']==2:
                 continue
             self.addChildToTree("", tkinter.END, dir, tag_to_use)
