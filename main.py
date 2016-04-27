@@ -65,8 +65,34 @@ class frontend(tkinter.Frame):
         self.setupTreeview()
         self.tree.pack(fill=tkinter.BOTH, expand=True, side=tkinter.TOP)
 
+    def getNewFilesystemSettings(self):
+        self.filesystem_to_use = self.filesystem_entry.get()
+        self.partition_to_use = int(self.partition_to_use)
+        self.filesystem_config_slave_window.destroy()
+
     def configureFilesystem(self):
-        pass
+        self.filesystem_config_slave_window = tkinter.Toplevel(self)
+        #self.filesystem_config_slave_window.protocol("WM_DELETE_WINDOW", self.cat_window_delete)
+        self.filesystem_config_slave_window.wm_title("Filesystem Config")
+
+        self.filesystem_entry = tkinter.Entry(self.filesystem_config_slave_window)
+        self.partition_to_use_internal = tkinter.StringVar()
+        self.partition_to_use_internal.set('0')
+        self.dropdown = tkinter.OptionMenu(self.filesystem_config_slave_window,self.partition_to_use_internal,'0','1','2','3')
+
+        filesystem_label = tkinter.Label(self.filesystem_config_slave_window, text="Filesystem to use:")
+        dropdown_label = tkinter.Label(self.filesystem_config_slave_window, text="Partition to use:")
+
+        done_button = tkinter.Button(self.filesystem_config_slave_window, text = 'Done', command=self.getNewFilesystemSettings)
+
+        filesystem_label.pack(side=tkinter.TOP, anchor=tkinter.W)
+        self.filesystem_entry.pack(side=tkinter.TOP)
+
+        dropdown_label.pack(side=tkinter.TOP, anchor=tkinter.W)
+        dropdown.pack(side=tkinter.TOP)
+
+        done_button.pack(side=tkinter.TOP)
+
 
     ##UI Setup##
     def setupMenubar(self):
