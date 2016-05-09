@@ -141,6 +141,16 @@ class frontend(tkinter.Frame):
         self.size_checkbox = tkinter.BooleanVar()
         self.access_time_checkbox = tkinter.BooleanVar()
         self.permission_checkbox = tkinter.BooleanVar()
+        self.change_time_checkbox = tkinter.BooleanVar()
+        self.modify_time_checkbox = tkinter.BooleanVar()
+        self.delete_time_checkbox = tkinter.BooleanVar()
+        self.creation_time_checkbox = tkinter.BooleanVar()
+        self.file_acl_checkbox = tkinter.BooleanVar()
+        self.checksum_checkbox = tkinter.BooleanVar()
+        self.flags_checkbox = tkinter.BooleanVar()
+        self.links_count_checkbox = tkinter.BooleanVar()
+        self.blocks_count_checkbox = tkinter.BooleanVar()
+        self.mode_checkbox = tkinter.BooleanVar()
 
         columnMenu = tkinter.Menu(menubar)
         columnMenu.add_checkbutton(label='Permissions', onvalue=True, offvalue=False, variable=self.permission_checkbox)
@@ -148,6 +158,16 @@ class frontend(tkinter.Frame):
         columnMenu.add_checkbutton(label='GID', onvalue=True, offvalue=False, variable=self.GID_checkbox)
         columnMenu.add_checkbutton(label='Size', onvalue=True, offvalue=False, variable=self.size_checkbox)
         columnMenu.add_checkbutton(label='Access_Time', onvalue=True, offvalue=False, variable=self.access_time_checkbox)
+        columnMenu.add_checkbutton(label='change_time', onvalue=True, offvalue=False, variable=self.change_time_checkbox)
+        columnMenu.add_checkbutton(label='modify_time', onvalue=True, offvalue=False, variable=self.modify_time_checkbox)
+        columnMenu.add_checkbutton(label='delete_time', onvalue=True, offvalue=False, variable=self.delete_time_checkbox)
+        columnMenu.add_checkbutton(label='creation_time', onvalue=True, offvalue=False, variable=self.creation_time_checkbox)
+        columnMenu.add_checkbutton(label='file_acl', onvalue=True, offvalue=False, variable=self.file_acl_checkbox)
+        columnMenu.add_checkbutton(label='checksum', onvalue=True, offvalue=False, variable=self.checksum_checkbox)
+        columnMenu.add_checkbutton(label='flags', onvalue=True, offvalue=False, variable=self.flags_checkbox)
+        columnMenu.add_checkbutton(label='links_count', onvalue=True, offvalue=False, variable=self.links_count_checkbox)
+        columnMenu.add_checkbutton(label='blocks_count', onvalue=True, offvalue=False, variable=self.blocks_count_checkbox)
+        columnMenu.add_checkbutton(label='mode', onvalue=True, offvalue=False, variable=self.mode_checkbox)
         columnMenu.add_command(label='Apply New Columns', command=self.reload_tree)
         menubar.add_cascade(label='Columns', menu=columnMenu)
 
@@ -187,7 +207,27 @@ class frontend(tkinter.Frame):
         if self.size_checkbox.get():
             self.tree['columns'] = self.tree['columns'] + ('size',)
         if self.access_time_checkbox.get():
-           self.tree['columns'] = self.tree['columns'] + ('access_time',) 
+           self.tree['columns'] = self.tree['columns'] + ('access_time',)
+        if self.change_time_checkbox.get():
+            self.tree['columns'] = self.tree['columns'] + ('change_time',) 
+        if self.modify_time_checkbox.get():
+            self.tree['columns'] = self.tree['columns'] + ('modify_time',)
+        if self.delete_time_checkbox.get():
+            self.tree['columns'] = self.tree['columns'] + ('delete_time',)
+        if self.creation_time_checkbox.get():
+            self.tree['columns'] = self.tree['columns'] + ('creation_time',)
+        if self.file_acl_checkbox.get():
+            self.tree['columns'] = self.tree['columns'] + ('file_acl',)
+        if self.checksum_checkbox.get():
+            self.tree['columns'] = self.tree['columns'] + ('checksum',)
+        if self.flags_checkbox.get():
+            self.tree['columns'] = self.tree['columns'] + ('flags',)
+        if self.links_count_checkbox.get():
+            self.tree['columns'] = self.tree['columns'] + ('links_count',)
+        if self.blocks_count_checkbox.get():
+            self.tree['columns'] = self.tree['columns'] + ('blocks_count',)
+        if self.mode_checkbox.get():
+            self.tree['columns'] = self.tree['columns'] + ('mode',)
 
         self.tree.column('name', width=150)
         self.tree.column('inode', width=50)
@@ -217,10 +257,51 @@ class frontend(tkinter.Frame):
             self.file_values_to_show += ['access_time']
             self.tree.column('access_time', width=100)
             self.tree.heading('access_time', text='Access_Time')
+        if self.change_time_checkbox.get():
+            self.file_values_to_show += ['change_time']
+            self.tree.column('change_time', width=100)
+            self.tree.heading('change_time', text='Change_Time')
+        if self.modify_time_checkbox.get():
+            self.file_values_to_show += ['modify_time']
+            self.tree.column('modify_time', width=100)
+            self.tree.heading('modify_time', text='Modify_Time')
+        if self.delete_time_checkbox.get():
+            self.file_values_to_show += ['delete_time']
+            self.tree.column('delete_time', width=100)
+            self.tree.heading('delete_time', text='Delete_Time')
+        if self.creation_time_checkbox.get():
+            self.file_values_to_show += ['creation_time']
+            self.tree.column('creation_time', width=100)
+            self.tree.heading('creation_time', text='Creation_Time')
+        if self.file_acl_checkbox.get():
+            self.file_values_to_show += ['file_acl']
+            self.tree.column('file_acl', width=100)
+            self.tree.heading('file_acl', text='File_ACL')
+        if self.checksum_checkbox.get():
+            self.file_values_to_show += ['checksum']
+            self.tree.column('checksum', width=100)
+            self.tree.heading('checksum', text='Checksum')
+        if self.flags_checkbox.get():
+            self.file_values_to_show += ['flags']
+            self.tree.column('flags', width=100)
+            self.tree.heading('flags', text='Flags')
+        if self.links_count_checkbox.get():
+            self.file_values_to_show += ['links_count']
+            self.tree.column('links_count', width=100)
+            self.tree.heading('links_count', text='Links_Count')
+        if self.blocks_count_checkbox.get():
+            self.file_values_to_show += ['blocks_count']
+            self.tree.column('blocks_count', width=100)
+            self.tree.heading('blocks_count', text='Blocks_Count')
+        if self.mode_checkbox.get():
+            self.file_values_to_show += ['mode']
+            self.tree.column('mode', width=100)
+            self.tree.heading('mode', text='Mode')
 
         self.scrollbary.config(command=self.tree.yview)
         self.scrollbarx.config(command=self.tree.xview)
-
+        
+        self.depth = 0
         tag_to_use = 'greenTag'
         for dir in self.fs.filesystem.userLS():
             if dir['inode']==2:

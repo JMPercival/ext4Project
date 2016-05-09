@@ -172,8 +172,17 @@ class ext4:
             temp_dir_dict['uid'] = dir_object_inode.i_uid
             temp_dir_dict['gid'] = dir_object_inode.i_gid
             temp_dir_dict['size'] = dir_object_inode.i_size
-            i_atime = dir_object_inode.i_atime_date.split()
-            temp_dir_dict['access_time'] = ' '.join(i_atime[1:4])
+            temp_dir_dict['access_time'] = dir_object_inode.i_atime_date
+            temp_dir_dict['change_time'] = dir_object_inode.i_ctime_date
+            temp_dir_dict['modify_time'] = dir_object_inode.i_mtime_date
+            temp_dir_dict['delete_time'] = dir_object_inode.i_dtime_date
+            temp_dir_dict['creation_time'] = dir_object_inode.i_crtime_date
+            temp_dir_dict['file_acl'] = dir_object_inode.i_file_acl
+            temp_dir_dict['checksum'] = dir_object_inode.i_checksum
+            temp_dir_dict['flags'] = dir_object_inode.i_flags
+            temp_dir_dict['links_count'] = dir_object_inode.i_links_count
+            temp_dir_dict['blocks_count'] = dir_object_inode.i_blocks
+            temp_dir_dict['mode'] = dir_object_inode.i_mode
             #print('{0}\t{1}\t{2}\t{3}\t{4}\t'.format(permission_string, uid, gid, size, overall_time) ,end='')
             temp_dir_dict['name'] = dir_object.decoded_name
 

@@ -95,7 +95,7 @@ class inode:
         self.i_uid= int(getHex(self.part, 0x2, 0x4, True),16)# /* Low 16 bits of Owner Uid */
         self.i_size_lo= int(getHex(self.part, 0x4, 0x8, True),16)#/* Size in bytes */
         self.i_atime= int(getHex(self.part, 0x8, 0xc, True),16)#* Access time */
-        self.i_ctime= int(getHex(self.part, 0xc, 0x10, True),16)#/* Creation time */
+        self.i_ctime= int(getHex(self.part, 0xc, 0x10, True),16)#/* Creation time */ This might actuall be Change time
         self.i_mtime= int(getHex(self.part, 0x10, 0x14, True),16)#* Modification time */
         self.i_dtime= int(getHex(self.part, 0x14, 0x18, True),16)#* * Deletion Time */
         self.i_gid= int(getHex(self.part, 0x18, 0x1a, True),16)#* Low 16 bits of Group Id */
@@ -130,6 +130,7 @@ class inode:
         self.i_ctime_date=time.ctime(self.i_ctime)
         self.i_mtime_date=time.ctime(self.i_mtime)
         self.i_dtime_date=time.ctime(self.i_dtime)
+        self.i_crtime_date=time.ctime(self.i_crtime)
 
         #UNION OSD2 Linux
         #TODO: Add in the hurd and masix versions
